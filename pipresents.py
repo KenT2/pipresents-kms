@@ -5,8 +5,8 @@ on the Raspberry Pi.
 It is aimed at primarily at  musems, exhibitions and galleries
 but has many other applications including digital signage
 
-Version 1.4 [pipresents-beep]
-Copyright 2012/2013/2014/2015/2016/2017/2018/2019/2020/2021, Ken Thompson
+Version 1.5 [pipresents-kms]
+Copyright 2012/2013/2014/2015/2016/2017/2018/2019/2020/2021/2022, Ken Thompson
 See github for licence conditions
 See readme.md and manual.pdf for instructions.
 """

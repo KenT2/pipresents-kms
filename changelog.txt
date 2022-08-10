@@ -1,3 +1,21 @@
+CHANGES FOR 1.5.1a  10/8/2022
+===================================
+modified - The deprecated omxplayer based video track and uzbl based web track have been removed.
+modified - This version currently requires fkms.In config.txt change from kms to fkms
+modified - now works with any User, but see Release Notes for required changes to configuration files.
+modified - removed the path to the default menu bullets from newly created profiles and all examples
+        PP automatically picks up the default bullet if necessary.
+fixed  - crash on nounclutter when pp_displaymanager.py is run.
+fixed  - bug in remi/remigui line 41
+fixed  - syntax warning in remi/remigui
+fixed  - changed command for inhibiting blanking
+fixed  - keyboard not working after resize of a window. In kbdriver.py and kbdriver_plus.py bind to top level window not canvas
+fixed  - pp_example_plugin.cfg in media missing an @
+fixed  - pp_menushow_1p5 example, correct background for bullets
+fixed  - pp_camera_1p5 example tidied up and track plugin comments improved. Must use legacy camera
+fixed - crash when menus have no bullet specified. Uses default bullet in this situation
+
+
 CHANGES FOR 1.4.6d 29/6/2022
 ============================
 enhanced - live tracks can now be sorted in reverse order by name using 'reverse'
