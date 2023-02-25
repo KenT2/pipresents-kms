@@ -1,3 +1,7 @@
+CHANGES FOR 1.5.1b  25/2/2022
+===================================
+fixed - ERROR click area lookup failed because PP was using the section name not the name= name in screen.cfg 
+
 CHANGES FOR 1.5.1a  10/8/2022
 ===================================
 modified - The deprecated omxplayer based video track and uzbl based web track have been removed.
