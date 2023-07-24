@@ -1,3 +1,22 @@
+Version 1.5.2a  24/7/2023
+========================
+AGGREGATED UPDATES FROM VERSION 1.4 (BEEP)
+
+It will be necessary to update the profiles to version 1.5.2. The update will happen automatically if you edit the profile. I recommend making a backup of all profile directories before editing them.
+
+This version removes the vlc based video tracks. Updating the profile in the editor will not delete the tracks of this type but there will be an error when the profile is run. You should create new mpv video tracks to replace the vlc tracks.
+
+The fields for mpv video tracks differ from those of VLC tracks (see Manual for details)
+
+This version removes the omxplayer video tracks and uzbl based web tracks. Updating the profile in the editor from an earlier issue of Beep will delete tracks of this type without warning from the profile but will keep any track references to them.
+
+This version uses RPi OS Bullseye out of the box. It does not require fkms.
+
+This version requires the legacy camera library if using the camera. Run raspi-config and select legacy camera.
+
+If Pi Presents is run under a User other than pi then file paths in some configuration files will require editing. Including but not limited to web.cfg, editor.cfg, examples.sh
+
+
 Version 1.5.1a  10/8/2022
 ========================
 This version removes the omxplayer video tracks and uzbl based web tracks. Updating the profile in the editor will delete tracks of this type without warning from the profile but will keep any track references to them.

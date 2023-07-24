@@ -37,7 +37,7 @@ class PPWebEditor(App):
         # ***************************************
         # INIT
         # ***************************************
-        self.editor_issue="1.5.1"
+        self.editor_issue="1.5.2"
         self.force_update= False
 
         # get directory holding the code
@@ -209,6 +209,8 @@ class PPWebEditor(App):
         track_add_from_file_menu.set_on_click_listener(self.add_track_from_file)
         track_new_menu = gui.MenuItem('New',width=120, height=30)
 
+        track_new_mpv_menu = gui.MenuItem('MPV Video',width=120, height=30)
+        track_new_mpv_menu.set_on_click_listener(self.new_mpv_track)
         track_new_vlc_menu = gui.MenuItem('VLC Video',width=120, height=30)
         track_new_vlc_menu.set_on_click_listener(self.new_vlc_track)
         track_new_audio_menu = gui.MenuItem('Audio',width=120,height=30)
@@ -224,7 +226,7 @@ class PPWebEditor(App):
         track_new_menu_menu = gui.MenuItem('Menu',width=120, height=30)
         track_new_menu_menu.set_on_click_listener(self.new_menu_track)
 
-
+        track_new_menu.append(track_new_mpv_menu)
         track_new_menu.append(track_new_vlc_menu)
         track_new_menu.append(track_new_audio_menu)
         track_new_menu.append(track_new_image_menu)
@@ -539,47 +541,47 @@ class PPWebEditor(App):
 
         
     def new_exhibit_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_exhibit_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_exhibit_1p5'
         self.new_profile(profile)
 
     def new_interactive_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_interactive_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_interactive_1p5'
         self.new_profile(profile)
 
     def new_menu_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_menu_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_menu_1p5'
         self.new_profile(profile)
 
     def new_presentation_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_presentation_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_presentation_1p5'
         self.new_profile(profile)
 
     def new_blank_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep +"ppt_blank_1p4"
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep +"ppt_blank_1p5"
         self.new_profile(profile)
 
     def new_mediashow_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_mediashow_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_mediashow_1p5'
         self.new_profile(profile)
         
     def new_liveshow_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_liveshow_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_liveshow_1p5'
         self.new_profile(profile)
 
     def new_artmediashow_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_artmediashow_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_artmediashow_1p5'
         self.new_profile(profile)
         
     def new_artliveshow_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_artliveshow_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_artliveshow_1p5'
         self.new_profile(profile)
 
     def new_radiobuttonshow_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_radiobuttonshow_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_radiobuttonshow_1p5'
         self.new_profile(profile)
 
     def new_hyperlinkshow_profile(self,widget):
-        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_hyperlinkshow_1p4'
+        profile = self.editor_dir+os.sep+'pp_resources'+os.sep+'pp_templates'+os.sep + 'ppt_hyperlinkshow_1p5'
         self.new_profile(profile)
 
 
@@ -1043,6 +1045,9 @@ class PPWebEditor(App):
 
     def new_vlc_track(self,widget):
         self.new_track(PPdefinitions.new_tracks['vlc'],None)
+        
+    def new_mpv_track(self,widget):
+        self.new_track(PPdefinitions.new_tracks['mpv'],None)
   
     def new_audio_track(self,widget):
         self.new_track(PPdefinitions.new_tracks['audio'],None)
@@ -1136,7 +1141,7 @@ class PPWebEditor(App):
         if ext.lower() in PPdefinitions.IMAGE_FILES:
             self.new_track(PPdefinitions.new_tracks['image'],{'title':title,'track-ref':'','location':location})
         elif ext.lower() in PPdefinitions.VIDEO_FILES:
-            self.new_track(PPdefinitions.new_tracks['vlc'],{'title':title,'track-ref':'','location':location})
+            self.new_track(PPdefinitions.new_tracks['mpv'],{'title':title,'track-ref':'','location':location})
         elif ext.lower() in PPdefinitions.AUDIO_FILES:
             self.new_track(PPdefinitions.new_tracks['audio'],{'title':title,'track-ref':'','location':location})
         elif ext.lower() in PPdefinitions.WEB_FILES:

@@ -1,3 +1,10 @@
+CHANGES FOR 1.5.2a  24/7/2023
+===================================
+enhanced - mpv based videoplayer (see release notes)
+deleted - vlc based videoplayer
+enhanced - Added driver for DRV2605 Haptic Controller
+fixed - PP hangs if Stop command is received during freeze-at-start
+
 CHANGES FOR 1.5.1b  25/2/2022
 ===================================
 fixed - ERROR click area lookup failed because PP was using the section name not the name= name in screen.cfg 

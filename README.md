@@ -1,9 +1,9 @@
-PI PRESENTS  - Version 1.5.1
+PI PRESENTS  - Version 1.5.2 (KMS)
 ============================
 
-This repository contains an experimental version of Pi Presents which will eventually use the drm/kms video system. However VLC under kms does not provide all the facilities that Pi Presents needs do it currently runs under the legacy fkms system.
+This repository contains an experimental version of Pi Presents which now uses the drm/kms video system. In this issue the VLC based videoplayer is replaced with a MPV based video player which integrates better into Pi Presents.
 
-Use if you really must have the enhanced security of Bullseye
+Apart from a working camera interface this issue has all the features of PI Presents Beep. Use it if you want the enhanced security of Bullseye and are happy to use Bleeding Edge software.
 
 
 TO INSTALL PIPRESENTS-KMS
@@ -52,7 +52,7 @@ The full manual in English is here https://github.com/KenT2/pipresents-kms/blob/
 Requirements
 -------------
 
-	* must use the latest version of Raspbian Bullseys with Desktop (not the Lite version)
+	* must use the latest version of Raspbian Bullseye with Desktop (not the Lite version)
 	* must be run from the PIXEL desktop.
 	* can be installed and run from any user that is created with RPI OS utilities
 	* must have Python 3 installed (which RPi OS does)
@@ -70,12 +70,6 @@ Pi Presents MUST have the latest version of RPi OS, get this by
          sudo apt update
          sudo apt full-upgrade
 	 
-Change to the legacy fkms video system
---------------------------------------
-edit config.txt using nano sudo nano /boot/config.txt
-
-find the line dtoverlay=vc4-kms-v3d and edit to dtoverlay=vc4-fkms-v3d
-
 
 Install required packages 
 -----------------------------
@@ -85,12 +79,12 @@ Install required packages
          
          sudo pip3 install selenium
          sudo apt install chromium-chromedriver
-         sudo pip3 install python-vlc
 
 Install optional packages
 ------------------------------
          sudo pip3 install evdev  (if you are using the input device I/O plugin)
          sudo apt install mpg123 (for .mp3 beeps)
+	 python3 -m install DRV2605 if using Vibes)
 
 	   
 Download Pi Presents KMS
@@ -143,7 +137,6 @@ Install Python 3 version of some packages:
 
       sudo apt-get install python3-pil.imagetk
       sudo pip3 install evdev
-      sudo pip3 install python-vlc
       
 The Python 2 versions of these packages can be left installed
 
@@ -184,7 +177,7 @@ These examples are compatible with the version of Pi Presents you have just down
 
 You can use the update>update all menu option of the editor to update all profiles in a single directory at once.
 
-Lastly you will need to do some manual updating of some of the field values as specified in  ReleaseNotes.txt. Start at the paragraph in ReleaseNotes.txt that introduces your previous version and work forwards
+Lastly you will need to do some manual updating of some of the field values as specified in ReleaseNotes.txt. Start at the paragraph in ReleaseNotes.txt that introduces your previous version and work forwards
 
 
 

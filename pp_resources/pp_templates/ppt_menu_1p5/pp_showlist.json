@@ -1,5 +1,5 @@
 {
- "issue": "1.5.1",
+ "issue": "1.5.2",
  "shows": [
   {
    "audio-speaker": "stereo",
@@ -28,6 +28,13 @@
    "mplayer-audio": "hdmi",
    "mplayer-other-options": "",
    "mplayer-volume": "0",
+   "mpv-aspect-mode": "original",
+   "mpv-audio": "hdmi",
+   "mpv-freeze-at-end": "yes",
+   "mpv-freeze-at-start": "no",
+   "mpv-other-options": "",
+   "mpv-volume": "100",
+   "mpv-window": "showcanvas 200+200+400*300",
    "pause-timeout": "",
    "sched-everyday": "",
    "sched-monthday": "",

@@ -10,6 +10,7 @@ from pp_showmanager import ShowManager
 from pp_timeofday import TimeOfDay
 from pp_imageplayer import ImagePlayer
 from pp_vlcplayer import VLCPlayer
+from pp_mpvplayer import MPVPlayer
 from pp_audioplayer import AudioPlayer
 from pp_chromeplayer import ChromePlayer
 from pp_messageplayer import MessagePlayer
@@ -261,7 +262,14 @@ class Show(object):
                                self.pp_profile,self.end,self.command_callback)
 
         elif track_type == "vlc":
-            return VLCPlayer(self.show_id,self.showlist,self.root,self.show_canvas,
+            self.mon.err(self,'VLC Player is not implemented, use MPV Player')
+            return None
+            #return VLCPlayer(self.show_id,self.showlist,self.root,self.show_canvas,
+             #                  self.show_params,selected_track,self.pp_dir,self.pp_home,
+             #                  self.pp_profile,self.end,self.command_callback)
+                               
+        elif track_type == "mpv":
+            return MPVPlayer(self.show_id,self.showlist,self.root,self.show_canvas,
                                self.show_params,selected_track,self.pp_dir,self.pp_home,
                                self.pp_profile,self.end,self.command_callback)
 

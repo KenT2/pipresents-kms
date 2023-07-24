@@ -145,7 +145,7 @@ class Validator(AdaptableDialog):
                             track_file=pp_profile+track_file[1:]
                             if not os.path.exists(track_file): self.display('f',"location "+track['location']+ " Media File not Found")
 
-                    if track['type'] in ('vlc','audio','message','image','chrome','menu'):
+                    if track['type'] in ('mpv','vlc','audio','message','image','chrome','menu'):
                         
                         # check common fields
                         self.check_animate('animate-begin',track['animate-begin'])
@@ -180,18 +180,19 @@ class Validator(AdaptableDialog):
                         if track['image-rotate'] != "" and not track['image-rotate'].isdigit(): self.display('f',"'Image Rotation' is not blank, 0 or a positive integer")
                         self.check_image_window('track','image-window',track['image-window'])
 
-                        
                     if track['type'] == "vlc":
+                        self.display('f',"'VLC Video Track has been removed from Pi Presents")
+                        
+                    if track['type'] == "mpv":
                         if track['pause-timeout'] != "" and not track['pause-timeout'].isdigit():
                             self.display('f',"'Pause Timeout' is not blank or a positive integer")
                         else:
                             if track['pause-timeout'] != "" and int(track['pause-timeout']) < 1: self.display('f',"'Pause Timeout' is less than 1")
 
-                        self.check_vlc_video_window('track','VLC Window',track['vlc-window'])
-                        self.check_vlc_volume('track','VLC Volume',track['vlc-volume'])
-                        self.check_vlc_max_volume('track','VLC Max Volume',track['vlc-max-volume'])                        
-                        self.check_vlc_layer('track','VLC Display Layer',track['vlc-layer'])
-                        self.check_vlc_image_duration('track','VLC Image Duration',track['vlc-image-duration'])                        
+                        self.check_mpv_video_window('track','MPV Window',track['mpv-window'])
+                        self.check_mpv_volume('track','MPV Volume',track['mpv-volume'])
+                        self.check_mpv_max_volume('track','MPV Max Volume',track['mpv-max-volume'])                        
+                      
 
                                                
                     if track['type'] == "audio":
@@ -334,10 +335,8 @@ class Validator(AdaptableDialog):
 
                 if not show['image-rotate'].isdigit(): self.display('f',"'Image Rotation' is not 0 or a positive integer")
                 self.check_volume('show','Audio Volume',show['mplayer-volume'])
-                self.check_vlc_video_window('show','VLC Window',show['vlc-window'])
-                self.check_vlc_layer('show','VLC Display Layer',show['vlc-layer'])
-                self.check_vlc_volume('show','VLC Volume',show['vlc-volume'])
-                self.check_vlc_image_duration('show','VLC Image Duration',show['vlc-image-duration'])  
+                self.check_mpv_video_window('show','MPV Window',show['mpv-window'])
+                self.check_mpv_volume('show','MPV Volume',show['mpv-volume'])  
                 self.check_image_window('show','Image Window',show['image-window'])
                 self.check_chrome_zoom('show','Chrome Zoom',show['chrome-zoom'])
 
@@ -528,58 +527,37 @@ class Validator(AdaptableDialog):
             return 
             
     
-    def check_vlc_volume(self,track_type,field,line):
+    def check_mpv_volume(self,track_type,field,line):
         if track_type == 'show' and line.strip() == '':
-            self.display('f','Show must specify VLC volume: ' + field + ", " + line)
+            self.display('f','Show must specify MPV volume: ' + field + ", " + line)
             return
         if track_type == 'track' and line.strip() == '':
             return
         if not line.isdigit():
-            self.display('f','VLC Volume must be a positive integer: ' + field + ", " + line)
+            self.display('f','MPV Volume must be a positive integer: ' + field + ", " + line)
             return
-        vlc_volume= int(line)
-        if vlc_volume>100:
-            self.display('f','VLC Volume must be <= 100: ' + field + ", " + line)
+        mpv_volume= int(line)
+        if mpv_volume>100:
+            self.display('f','MPV Volume must be <= 100: ' + field + ", " + line)
             return
         return
 
 
-    def check_vlc_max_volume(self,track_type,field,line):
+    def check_mpv_max_volume(self,track_type,field,line):
         if track_type == 'track' and line.strip() == '':
             return
         if not line.isdigit():
-            self.display('f','VLC Max Volume must be a positive integer: ' + field + ", " + line)
+            self.display('f','MPV Max Volume must be a positive integer: ' + field + ", " + line)
             return
-        vlc_max_volume= int(line)
-        if vlc_max_volume>100:
-            self.display('f','VLC Max Volume must be <= 100: ' + field + ", " + line)
+        mpv_max_volume= int(line)
+        if mpv_max_volume>100:
+            self.display('f','MPV Max Volume must be <= 100: ' + field + ", " + line)
             return
         return
 
         
-    def check_vlc_layer(self,track_type,field,line):
-        if track_type == 'show' and line.strip() == '':
-            self.display('f','Show must specify VLC Layer: ' + field + ", " + line)
-            return
-        if line=='hidden':
-            return
-        if not line.isdigit():
-            self.display('f','VLC Display Layer is not a positive number: ' + field + ", " + line)
-            return
-        return
+
     
-
-    def check_vlc_image_duration(self,track_type,field,line):
-        if track_type == 'show' and line.strip() == '':
-            self.display('f','Show must specify VLC Image Duration ' + field + ", " + line)
-            return
-        if track_type == 'track' and line.strip() == '':
-            return
-        if not line.isdigit():
-            self.display('f','VLC Image Duration must be a positive integer: ' + field + ", " + line)
-            return
-        return
-
 
 
 # ***********************************
@@ -1370,7 +1348,7 @@ class Validator(AdaptableDialog):
 # VIDEO WINDOW
 # ************************************
 
-    def check_vlc_video_window(self,track_type,field,line):
+    def check_mpv_video_window(self,track_type,field,line):
         
         words=line.split()
         if track_type == 'show' and len(words) == 0:
@@ -1381,11 +1359,11 @@ class Validator(AdaptableDialog):
             return
             
         if len(words) not in (1,2):
-            self.display('f','bad vlc video window form: ' + field + ", " + line)
+            self.display('f','bad MPV video window form: ' + field + ", " + line)
             return
             
         if words[0] not in ('display','showcanvas'):
-            self.display('f','Bad VLC Window option: ' + field + ", " + line)
+            self.display('f','Bad MPV Window option: ' + field + ", " + line)
             return
 
         

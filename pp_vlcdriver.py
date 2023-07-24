@@ -71,11 +71,16 @@ class VLCDriver(object):
         self.logger.log('init VLC instance')
         self.quit_load_signal=False
         self.quit_show_signal=False
-        self.instance_options=' --mmal-layer=1 --mmal-vout-window 400x300+100+100 --mmal-vout-transparent --aout=pulse --mmal-display=HDMI-1 '         # obtained from iopts command, just a test set
+        # self.instance_options=' --mmal-layer=1 --mmal-vout-window 400x300+100+100 --mmal-vout-transparent --aout=pulse --mmal-display=HDMI-1 '
+        # kms
+        self.instance_options= ' '
+                 # obtained from iopts command, just a test set
         self.player_options=''            #options for mediaplayer, none required
-        self.instance_mandatory=' --quiet --no-xlib --vout mmal_vout --mmal-vout-transparent '   #mandatory set of options
+        # self.instance_mandatory=' --quiet --no-xlib --vout mmal_vout --mmal-vout-transparent '   #mandatory set of options
+        # kms
+        self.instance_mandatory= ' --fullscreen  --vout drm_vout  '
 
-        self.track_path= '/home/pi/pp_home/media/5sec.mp4'   #test track to play
+        self.track_path= '/home/pp/pp_home/media/5sec.mp4'   #test track to play
         self.freeze_at_start='no'       #test value, normally obtained from pauseopts command
         self.freeze_at_end='yes'           #test value, normally obtained from pauseopts command
         self.show_status_thread=None
@@ -175,8 +180,13 @@ class VLCDriver(object):
                 self.player.set_pause(True)
                 self.frozen_at_start=True
                 self.logger.log ('track frozen at start at: ',position,self.zero_count)
-                self.state='load-ok'
-                self.logger.log ('load-ok at: ',position)
+                #krt
+                if self.freeze_at_start in ('before-first-frame','after-first-frame'):
+                    self.logger.log ('stop-frozen at: ',position)
+                    self.state='load-frozen'
+                else:
+                    self.state='load-ok'
+                    self.logger.log ('load-ok at: ',position)
                 return
                 
             timeout-=1
@@ -320,7 +330,7 @@ class VLCDriver(object):
     def stop(self):
         if self.frozen_at_start is True:
             self.player.stop()
-            self.state='stop-frozen'
+            self.state='show-niceday'
             self.logger.log('stop during frozen at start',self.state)
             return
         else:
