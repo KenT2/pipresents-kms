@@ -80,13 +80,16 @@ Install required packages
          sudo pip3 install selenium
          sudo apt install chromium-chromedriver
 
+         sudo pip3 install mpv
+
+
 Install optional packages
 ------------------------------
          sudo pip3 install evdev  (if you are using the input device I/O plugin)
          sudo apt install mpg123 (for .mp3 beeps)
-	 python3 -m install DRV2605 if using Vibes)
+         python3 -m install DRV2605 (if using Vibes)
 
-	   
+
 Download Pi Presents KMS
 ----------------------------
 
@@ -132,6 +135,9 @@ Now read the manual to try other examples.
 
 Updating Pi Presents from earlier Versions of Pi Presents Beep or Pi Presents Gapless
 ======================================================================================
+Install new libraries:
+
+      sudo pip3 install mpv
 
 Install Python 3 version of some packages:
 
