@@ -87,7 +87,7 @@ Install optional packages
 ------------------------------
          sudo pip3 install evdev  (if you are using the input device I/O plugin)
          sudo apt install mpg123 (for .mp3 beeps)
-         python3 -m install DRV2605 (if using Vibes)
+         python3 -m pip install DRV2605 (if using Vibes)
 
 
 Download Pi Presents KMS

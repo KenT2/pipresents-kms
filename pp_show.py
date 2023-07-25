@@ -9,7 +9,7 @@ from PIL import ImageTk
 from pp_showmanager import ShowManager
 from pp_timeofday import TimeOfDay
 from pp_imageplayer import ImagePlayer
-from pp_vlcplayer import VLCPlayer
+# from pp_vlcplayer import VLCPlayer
 from pp_mpvplayer import MPVPlayer
 from pp_audioplayer import AudioPlayer
 from pp_chromeplayer import ChromePlayer

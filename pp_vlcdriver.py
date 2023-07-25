@@ -59,7 +59,7 @@ mute/unmute - mute without changing volume
 import time
 import threading
 import sys,os
-import vlc #sudo pip3 install python-vlc
+# import vlc #sudo pip3 install python-vlc
 
 
 class VLCDriver(object):
