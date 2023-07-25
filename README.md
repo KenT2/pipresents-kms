@@ -80,7 +80,8 @@ Install required packages
          sudo pip3 install selenium
          sudo apt install chromium-chromedriver
 
-         sudo pip3 install mpv
+         sudo apt install mpv
+		 sudo apt install python3-mpv
 
 
 Install optional packages
