@@ -81,14 +81,14 @@ Install required packages
          sudo apt install chromium-chromedriver
 
          sudo apt install mpv
-		 sudo apt install python3-mpv
-
+         sudo apt install python3-mpv
+         python3 -m pip install DRV2605
 
 Install optional packages
 ------------------------------
          sudo pip3 install evdev  (if you are using the input device I/O plugin)
          sudo apt install mpg123 (for .mp3 beeps)
-         python3 -m pip install DRV2605 (if using Vibes)
+
 
 
 Download Pi Presents KMS
