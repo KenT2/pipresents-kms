@@ -67,7 +67,7 @@ class AudioPlayer(Player):
             mplayer_volume= self.track_params['mplayer-volume'].strip()
         else:
             mplayer_volume= self.show_params['mplayer-volume'].strip()
-        mplayer_volume_int=int(mplayer_volume)+100    #60 for Jessie
+        mplayer_volume_int=int(mplayer_volume)
         self.volume_option= '-volume ' + str(mplayer_volume_int)
 
         # get speaker from profile
@@ -114,24 +114,23 @@ class AudioPlayer(Player):
 
         self.mon.trace(self,'')
         
-        #for pulse get sink name and check device is connected 
-        self.audio_sys=self.am.get_audio_sys()
-        if self.audio_sys == 'pulse':
-            status,message,self.mplayer_sink = self.am.get_sink(self.mplayer_audio)
-            if status == 'error':
-                self.mon.err(self,message)
-                self.play_state='load-failed'
-                if self.loaded_callback is not  None:
-                    self.loaded_callback('error',message)
-                    return
-                    
-            if not self.am.sink_connected(self.mplayer_sink):
-                self.mon.err(self,'audio device not connected - '+self.mplayer_audio + '/n sink: '+self.mplayer_sink)
-                self.play_state='load-failed'
-                if self.loaded_callback is not  None:
-                    self.loaded_callback('error','audio device not connected')
-                    return            
-
+        #get sink name and check device is connected 
+        status,message,self.mplayer_sink = self.am.get_sink(self.mplayer_audio)
+        if status == 'error':
+            self.mon.err(self,message)
+            self.play_state='load-failed'
+            if self.loaded_callback is not  None:
+                self.loaded_callback('error',message)
+                return
+                
+        if not self.am.sink_connected(self.mplayer_sink):
+            self.mon.err(self,'audio device not connected - '+self.mplayer_audio + '/n sink: '+self.mplayer_sink)
+            self.play_state='load-failed'
+            if self.loaded_callback is not  None:
+                self.loaded_callback('error','audio device not connected')
+                return            
+        print (self.mplayer_audio,self.mplayer_sink)
+        
         # do common bits of  load
         Player.pre_load(self)
         
@@ -358,46 +357,17 @@ class AudioPlayer(Player):
         if self.play_state == 'loaded':
             # initialise all the state machine variables
             self.duration_count = 0
-
             
-            #print (self.am.get_audio_sys(),self.mplayer_audio)
-            if self.audio_sys=='cset':
-                driver_option=''
-                #print ('cset audio',self.mplayer_audio)
-                if self.mplayer_audio != "":
-                    if self.mplayer_audio in ('hdmi','hdmi0'):
-                        os.system("amixer -q -c 0 cset numid=3 2")
-                    elif self.mplayer_audio == 'hdmi1':
-                        os.system("amixer -q -c 0 cset numid=3 3")
-                    elif self.mplayer_audio in ('local','A/V'):
-                        os.system("amixer -q -c 0 cset numid=3 1")
-                    else:
-                        pass
-            elif self.audio_sys == "alsa":
-                if self.mplayer_audio in ('hdmi','hdmi0'):
-                    driver_option=' -ao alsa:device=plughw=b1.0 '
-                elif self.mplayer_audio == 'hdmi1':
-                    driver_option=' -ao alsa:device=plughw=b2.0 '
-                elif self.mplayer_audio in ('alsa','USB'):
-                    driver_option=' -ao alsa:device=plughw=Device.0 '
-                elif self.mplayer_audio in ('local','A/V'):
-                    driver_option=' -ao alsa:device=plughw=Headphones.0 '
-                else:
-                    driver_option=''
-                #print ('alsa audio',driver_option)
-                
-            elif self.audio_sys == "pulse":
-                if self.mplayer_sink != '':
-                    driver_option=' -ao pulse::'+self.mplayer_sink
-                else:
-                    driver_option=''
-                #print ('pulse audio',self.mplayer_audio,driver_option) 
+            if self.mplayer_sink != '':
+                driver_option=' -ao pulse::'+self.mplayer_sink
             else:
                 driver_option=''
-                #print ('bad audio system',self.audio_sys)
+            #print ('pulse audio',self.mplayer_audio,driver_option) 
+
                     
             # play the track               
             options = ' '+ self.mplayer_other_options + ' '+ driver_option + ' ' +  self.volume_option + ' -af '+ self.speaker_option + ' '
+            print (options)
             if self.track != '':
                 self.mplayer.play(self.track,options)
                 self.mon.log (self,'Playing audio track from show Id: '+ str(self.show_id))

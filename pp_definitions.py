@@ -427,7 +427,7 @@ class PPdefinitions(object):
                     'debug-path':{'shape':'option-menu','text':'Print Path Debug ','must':'no','read-only':'no','values':['yes','no']},
                     'disable-show-control-events':{'shape':'option-menu','text':'Disable Show Control on Event ','must':'no','read-only':'no','values':['yes','no']},
                     'display-name':{'shape':'option-menu','text':'Display','must':'no','read-only':'no',
-                                    'values':['HDMI','HDMI0','HDMI1','DSI0','A/V']},
+                                    'values':['HDMI','HDMI0','HDMI1','DSI0']},
                     'disable-controls':{'shape':'option-menu','text':'Disable Controls ','must':'no','read-only':'no','values':['yes','no']},
                     'duration':{'shape':'entry','text':'Duration (secs)','must':'no','read-only':'no'},
                     'eggtimer-text':{'shape':'text','text':'Egg Timer Text','must':'no','read-only':'no'},
@@ -464,13 +464,13 @@ class PPdefinitions(object):
                     'message-justify':{'shape':'option-menu','text':'Justification','must':'no','read-only':'no',
                                        'values':['left','center','right']},
                     'mplayer-audio':{'shape':'option-menu','text':'Audio Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','USB','A/V','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
                     'mplayer-other-options':{'shape':'entry','text':'Audio Player Options','must':'no','read-only':'no'},
                     'mplayer-volume':{'shape':'entry','text':'Audio Volume','must':'no','read-only':'no'},
                     
                     
                     'vlc-audio':{'shape':'option-menu','text':'VLC Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','A/V','USB','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
                     'vlc-other-options':{'shape':'entry','text':'VLC Player Options','must':'no','read-only':'no'},
                     'vlc-volume':{'shape':'entry','text':'VLC Player Volume','must':'no','read-only':'no'},
                     'vlc-window':{'shape':'entry','text':'VLC Window','must':'no','read-only':'no'},
@@ -484,7 +484,7 @@ class PPdefinitions(object):
                                        'values':['yes','no']},     
                                        
                     'mpv-audio':{'shape':'option-menu','text':'MPV Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','A/V','USB','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
                     'mpv-other-options':{'shape':'entry','text':'MPV Player Options','must':'no','read-only':'no'},
                     'mpv-volume':{'shape':'entry','text':'MPV Player Volume','must':'no','read-only':'no'},
                     'mpv-window':{'shape':'entry','text':'MPV Window','must':'no','read-only':'no'},
@@ -824,7 +824,7 @@ class PPdefinitions(object):
                             'background-colour':{'shape':'colour','text':'Background Colour','must':'no','read-only':'no'},
                             'browser-commands':{'shape':'text','text':'Browser Commands','must':'no','read-only':'no'},
                             'display-name':{'shape':'option-menu','text':'Display (video)','must':'no','read-only':'no',
-                                    'values':['','HDMI','HDMI0','HDMI1','DSI0','A/V']},
+                                    'values':['','HDMI','HDMI0','HDMI1','DSI0']},
                             'display-show-background':{'shape':'option-menu','text':'Display Show Background','must':'no','read-only':'no',
                                        'values':['yes','no','']},
                             'display-show-text':{'shape':'option-menu','text':'Display Show Text','must':'no','read-only':'no',
@@ -893,12 +893,12 @@ class PPdefinitions(object):
                             'message-html-background-colour':{'shape':'colour','text':'HTML Background Colour','must':'no','read-only':'no'},           
  
                             'mplayer-audio':{'shape':'option-menu','text':'Audio Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','A/V','USB','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
                             'mplayer-other-options':{'shape':'entry','text':'Audio Player Options','must':'no','read-only':'no'},
                             'mplayer-volume':{'shape':'entry','text':'Audio Player Volume','must':'no','read-only':'no'},
 
                             'mpv-audio':{'shape':'option-menu','text':'MPV Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','A/V','USB','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
                             'mpv-other-options':{'shape':'entry','text':'MPV Player Options','must':'no','read-only':'no'},
                         'mpv-volume':{'shape':'entry','text':'MPV Player Volume','must':'no','read-only':'no'},
                         'mpv-max-volume':{'shape':'entry','text':'MPV Player Max Volume','must':'no','read-only':'no'},
@@ -917,7 +917,7 @@ class PPdefinitions(object):
                             
                             
                             'vlc-audio':{'shape':'option-menu','text':'VLC Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','A/V','USB','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
                             'vlc-other-options':{'shape':'entry','text':'VLC Player Options','must':'no','read-only':'no'},
                         'vlc-volume':{'shape':'entry','text':'VLC Player Volume','must':'no','read-only':'no'},
                         'vlc-max-volume':{'shape':'entry','text':'VLC Player Max Volume','must':'no','read-only':'no'},

@@ -5,9 +5,9 @@ import subprocess
 class AudioManager(object):
 
     config=None
-    profile_names=('hdmi','hdmi0','hdmi1','A/V','local','USB','USB2','bluetooth','default')
+    profile_names=('hdmi','hdmi0','hdmi1','A/V','USB','USB2','bluetooth')
     sink_map={}
-    audio_sys= ''
+
     
         
     #called for every class that uses it.
@@ -17,26 +17,27 @@ class AudioManager(object):
     #called once at start
     def init(self,pp_dir):
         AudioManager.sink_map={}
+        
         status,message=self.read_config(pp_dir)
         if status=='error':
             return status,message
             
-        status,message,val=self.read_audio_sys()
+        pi_model=self.find_pi_model()
+                    
+        status,message=self.read_sinks(pi_model)
         if status=='error':
             return status,message
-        AudioManager.audio_sys=val
-        #print(AudioManager.audio_sys)
-        
-        if AudioManager.audio_sys == 'pulse':
-            status,message=self.read_sinks()
-            if status=='error':
-                return status,message
+            
+        status,message=self.read_sinks('all')
+        if status=='error':
+            return status,message            
+            
         #print (self.get_sink('hdmi'))
         return 'normal','audio.cfg read'
 
-
+    # legacy to avoid modifying other modules
     def get_audio_sys(self):
-        return AudioManager.audio_sys
+        return 'pulse'
 
 
     def get_sink(self,name):
@@ -66,24 +67,30 @@ class AudioManager(object):
 # ****************************
 # configuration
 # ****************************
-    def read_audio_sys(self):
-        if not self.section_in_config('system'):
-            return 'error','no system section in audio.cfg',''
-        if not self.item_in_config('system','audio-system'):
-            return 'error','no audio-system in audio.cfg',''
-        val=self.get_item_in_config('system','audio-system').lower()
-        if val not in ('pulse','alsa','cset'):
-            return 'error','unknown audio-system in audio.cfg - '+ val,''
-        return 'normal','',val
+
+
+# Determine model of Pi - 1,2,3,4
+## awk '/^Revision/ {sub("^1000", "", $3); print $3}' /proc/cpuinfo 
+
+    def find_pi_model(self):
+        command=['cat', '/proc/device-tree/model']
+        l_reply=subprocess.run(command,stdout=subprocess.PIPE)
+        l_reply_list=l_reply.stdout.decode('utf-8').split(' ')
+        if l_reply_list[2] == 'Zero':
+            return 'pi0'
+        elif l_reply_list[2] == 'Model':
+            return 'pi1'
+        else:
+            return 'pi'+l_reply_list[2]
+            
                  
-    def read_sinks(self):
-        if not self.section_in_config('pulse'):
-            return 'error','no pulse section in audio.cfg'
+    def read_sinks(self,pi_model):
+        if not self.section_in_config(pi_model):
+            return 'error','section  not in audio.cfg: '+pi_model
         for name in AudioManager.profile_names:
-            if not self.item_in_config('pulse',name):
-                return 'error','audio device name not in audio.cfg - '+name
-            val=self.get_item_in_config('pulse',name)
-            AudioManager.sink_map[name]=val
+            if self.item_in_config(pi_model,name):
+                val=self.get_item_in_config(pi_model,name)
+                AudioManager.sink_map[name]=val
         #print (AudioManager.sink_map)
         return 'normal',''
 
@@ -117,29 +124,31 @@ class PiPresents(object):
         path=sys.path[0]
         status,message=self.am.init(path)
         if status=='error':
-            print (message)
+            print ('Error: '+message)
             exit(0)
         return
         #print (self.am.sink_connected('alsa_output.platform-bcm2835_audio.digital-stereo'))
 
     def info(self):
-        audio_sys=self.am.get_audio_sys()
-        print ('\nAudio System:  '+audio_sys)
-        if audio_sys=='pulse':
-            print ('\nDevices:')
-            print ('%-10s%-5s%-50s ' % ('Name','Connected','     Sink Name'))
-            for name in AudioManager.profile_names:
-                sink= self.am.get_sink(name)[2]
+
+        print ('\nDevices:')
+        print ('%-10s%-5s%-50s ' % ('Name','Connected','     Sink Name'))
+        for name in AudioManager.profile_names:
+            status,message,sink_name=self.am.get_sink(name)
+            if status=='normal':
+                sink=sink_name
                 if sink=='':
-                    sink='sink not defined, default device will be used '
-                    connected = '     '
-                else:
-                    conn= self.am.sink_connected(sink)
-                    if conn:
-                        connected='yes'
-                    else:
-                        connected ='No'
-                print ('%-10s%-6s%-50s ' % (name,connected,sink))
+                    sink='sink not defined, taskbar device will be used '
+                connected = '     '
+            else:
+                sink=message
+                
+            conn= self.am.sink_connected(sink)
+            if conn:
+                connected='yes'
+            else:
+                connected ='No'
+            print ('%-10s%-6s%-50s ' % (name,connected,sink))
 
 if __name__ == '__main__':
     pp=PiPresents()

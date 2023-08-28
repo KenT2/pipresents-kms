@@ -1,3 +1,15 @@
+
+
+CHANGES FOR 1.5.2b  2/86/2023
+===================================
+deleted - support for the A/V display has been discontinued. Use a HDMI to A/V convertor
+enhanced - Pi Presents can now use 3 displays on a Pi4 dsi0, hdmi0, hdmi1
+modified - display configuration now works on Pi3 in addition to Pi4. NOTE: display.cfg has changed
+modified - audio configuration now works on Pi3 in addition to Pi4, NOTE: audio.cfg has changed
+fixed - audioplayer output volume overload and lack of volume control
+modified - The monitor on/off show control command has been updated for KMS.
+
+
 CHANGES FOR 1.5.2a  24/7/2023
 ===================================
 enhanced - mpv based videoplayer (see release notes)

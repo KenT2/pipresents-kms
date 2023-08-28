@@ -1,6 +1,11 @@
-Version 1.5.2a  24/7/2023
+
+
+Version 1.5.2b  26/8/2023
 ========================
 AGGREGATED UPDATES FROM VERSION 1.4 (BEEP)
+
+/pp_config/display.cfg has been modified. If you have modified display.cfg then edit this new version to include your changes
+/pp_config/audio.cfg has been radically modified. If you have modified audio.cfg for USB or bluetooth then edit this new version to include your changes. The pulseaudio sink names appear to be different for different models of Pi but I thnk are the same for individual boards. If I am incorrect then please contact me and edit the file as described in the file.
 
 It will be necessary to update the profiles to version 1.5.2. The update will happen automatically if you edit the profile. I recommend making a backup of all profile directories before editing them.
 
@@ -12,7 +17,7 @@ This version removes the omxplayer video tracks and uzbl based web tracks. Updat
 
 This version uses RPi OS Bullseye out of the box. It does not require fkms.
 
-This version requires the legacy camera library if using the camera. Run raspi-config and select legacy camera.
+This version requires the legacy camera library if using the camera. Run sudo raspi-config and select legacy camera.
 
 If Pi Presents is run under a User other than pi then file paths in some configuration files will require editing. Including but not limited to web.cfg, editor.cfg, examples.sh
 

@@ -7,9 +7,6 @@ from time import sleep
 from pp_utils import Monitor
 
 """
- pyomxplayer from https://github.com/jbaiter/pyomxplayer
- extensively modified by KenT
-
  mplayerDriver hides the detail of using the mplayer command  from audioplayer
  This is meant to be used with pp_audioplayer.py
  Its easy to end up with many copies of mplayer running if this class is not used with care.

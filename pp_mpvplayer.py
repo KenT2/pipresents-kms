@@ -150,14 +150,14 @@ class MPVPlayer(Player):
                     
             self.add_option('ao','pulse')
         else:
-            self.mon.err(self,'audio systems other than pulseaudio are not supported\n hint: audio.cfg error' )
+            self.mon.err(self,'audio systems other than pulseaudio are not supported' )
             self.play_state='load-failed'
             if self.loaded_callback is not  None:
                 self.loaded_callback('error','audio device not connected')
                 return 
                 
         # AUDIO DEVICE
-        print (self.mpv_sink)
+        #print (self.mpv_audio,self.mpv_sink)
         self.add_option ('audio-device','pulse/'+self.mpv_sink)
         
         # VOLUME

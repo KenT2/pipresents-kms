@@ -59,7 +59,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.2"
-        self.pipresents_minorissue = '1.5.2a'
+        self.pipresents_minorissue = '1.5.2b'
 
         StopWatch.global_enable=False
         
@@ -294,20 +294,9 @@ class PiPresents(object):
             name=self.dm.name_of_display(display_id)
             width,height=self.dm.real_display_dimensions(display_id)
             x,y=self.dm.real_display_position(display_id)
-            matrix,ms=self.dm.touch_matrix_for(display_id)
-            rotation=self.dm.real_display_orientation(display_id)
-            self.mon.log(self,'   - '+ name + ' Id: '+str(display_id) + ' '+str(x)+'+'+str(y)+'+'+str(width)+'*'+str(height) + ' '+rotation)
-            self.mon.log(self,'     '+ ms)
-            #print ('root is',self.root)
-            #print ('canvas from dm is',name,canvas_obj)
-                
-            status,message,driver_name=self.dm.get_driver_name(display_id)
-            if status == 'normal':
-                self.mon.log(self,name + ':  Touch Driver: '+driver_name+ '\n')
-            elif status == 'null':
-                self.mon.log(self,name + ':  Touch Driver not Defined\n')
-            else:
-                self.mon.err(self,message)
+            self.mon.log(self,'   - '+ name + ' Id: '+str(display_id) + ' '+str(x)+'+'+str(y)+'+'+str(width)+'*'+str(height))
+        if self.dm.does_display_overlap():
+            self.mon.log(self,'WARNING, Two or More displays overlap')
                 
             
 
@@ -348,7 +337,27 @@ class PiPresents(object):
         status,message=self.audiomanager.init(self.pp_dir)
         if status == 'error':
             self.mon.err(self,message)
-            self.end('error',message)        
+            self.end('error',message)
+            
+        self.mon.log(self,'Audio Devices:')
+        self.mon.log(self,'Name'+'    Connected'+'     Sink Name')
+        for name in AudioManager.profile_names:
+            status,message,sink_name=self.audiomanager.get_sink(name)
+            if status=='normal':
+                sink=sink_name
+                if sink=='':
+                    sink='sink not defined, taskbar device will be used '
+                connected = '     '
+            else:
+                sink='ERROR '+message
+                
+            conn= self.audiomanager.sink_connected(sink)
+            if conn:
+                connected='yes'
+            else:
+                connected ='No'
+            self.mon.log(self,name +'   '+ connected + '    '+ sink)
+
 
         # initialise the Beeps Player
         self.bp=BeepPlayer()

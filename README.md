@@ -84,6 +84,7 @@ Install required packages
          sudo apt install python3-mpv
          python3 -m pip install DRV2605
 
+
 Install optional packages
 ------------------------------
          sudo pip3 install evdev  (if you are using the input device I/O plugin)
