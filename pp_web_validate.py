@@ -145,7 +145,7 @@ class Validator(AdaptableDialog):
                             track_file=pp_profile+track_file[1:]
                             if not os.path.exists(track_file): self.display('f',"location "+track['location']+ " Media File not Found")
 
-                    if track['type'] in ('mpv','vlc','audio','message','image','chrome','menu'):
+                    if track['type'] in ('mpv','audio','message','image','chrome','menu'):
                         
                         # check common fields
                         self.check_animate('animate-begin',track['animate-begin'])
@@ -495,36 +495,24 @@ class Validator(AdaptableDialog):
 # VIDEO
 # ************************************ 
 
-    def check_volume(self,track_type,field,line):
+    def check_volume(self,track_type,field,line):      # now audio track only
         if track_type == 'show' and line.strip() == '':
-            self.display('f','Wrong number of fields: ' + field + ", " + line)
+            self.display('f','Show must specify Audio Track volume: ' + field + ", " + line)
             return
         if track_type == 'track' and line.strip() == '':
             return
-        if line[0] not in ('0','-'):
-            self.display('f','Invalid value: ' + field + ", " + line)
+        if not line.isdigit():
+            self.display('f','Audio Track Volume must be a positive integer: ' + field + ", " + line)
             return
-        if line[0] ==  '0':
-            if not line.isdigit():
-                self.display('f','Invalid value: ' + field + ", " + line)
-                return
-            if int(line) != 0:
-                self.display('f','out of range -60 > 0: ' + field + ", " + line)
-                return
+        audio_volume= int(line)
+        if audio_volume == 0:
+            self.display('w','Audio Track Volume range has changed from -60>0 to 0>100: ' + field + ", " + line)
+
+        if audio_volume>100:
+            self.display('f','Audio Track Volume must be <= 100: ' + field + ", " + line)
             return
-            
-        elif line[0] == '-':
-            if not line[1:].isdigit():
-                self.display('f','Invalid value: ' + field + ", " + line)
-                return
-            if int(line)<-60 or int(line)>0:
-                self.display('f','out of range -60 > 0: ' + field + ", " + line)
-                return
-            return
-        
-        else:
-            self.display('f','help, do not understand!: ' + field + ", " + line)
-            return 
+        return
+
             
     
     def check_mpv_volume(self,track_type,field,line):
@@ -1169,20 +1157,6 @@ class Validator(AdaptableDialog):
 
         delay_text=fields[0]
         if  not delay_text.isdigit(): self.display('f','Delay is not 0 or a positive integer in:' + field + ", " + line)
-
-        name = fields[1]
-        # name not checked - done at runtime
-
-        out_type = fields[2]
-
-        if out_type in ('state',):
-            if len(fields) != 4:
-                   self.display('f','wrong number of fields for State: ' + field + ", " + line)
-            else:                   
-                to_state_text=fields[3]
-                if (to_state_text not in ('on','off')): self.display('f','Unknown parameter value in: ' + field + ", " + line)
-        else:
-            self.display('w','Unknown parameter type in: ' + field + ", " + line + ' This could be due to use of a new I/O plugin')
 
         return
     

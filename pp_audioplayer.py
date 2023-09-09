@@ -67,8 +67,8 @@ class AudioPlayer(Player):
             mplayer_volume= self.track_params['mplayer-volume'].strip()
         else:
             mplayer_volume= self.show_params['mplayer-volume'].strip()
-        mplayer_volume_int=int(mplayer_volume)
-        self.volume_option= '-volume ' + str(mplayer_volume_int)
+        self.mplayer_volume_int=int(mplayer_volume)
+        self.volume_option= '-volume ' + str(self.mplayer_volume_int)
 
         # get speaker from profile
         if  self.track_params['audio-speaker'] != "":
@@ -128,8 +128,15 @@ class AudioPlayer(Player):
             self.play_state='load-failed'
             if self.loaded_callback is not  None:
                 self.loaded_callback('error','audio device not connected')
-                return            
-        print (self.mplayer_audio,self.mplayer_sink)
+                return 
+                
+        if self.mplayer_volume_int<0 or self.mplayer_volume_int>100:
+            self.mon.err(self,'audio volume out of range: - '+str(self.mplayer_volume_int))
+            self.play_state='load-failed'
+            if self.loaded_callback is not  None:
+                self.loaded_callback('error','audio volume out of range')
+                return 
+        
         
         # do common bits of  load
         Player.pre_load(self)
@@ -367,7 +374,7 @@ class AudioPlayer(Player):
                     
             # play the track               
             options = ' '+ self.mplayer_other_options + ' '+ driver_option + ' ' +  self.volume_option + ' -af '+ self.speaker_option + ' '
-            print (options)
+            # print (options)
             if self.track != '':
                 self.mplayer.play(self.track,options)
                 self.mon.log (self,'Playing audio track from show Id: '+ str(self.show_id))

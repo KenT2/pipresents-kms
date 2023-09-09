@@ -1,25 +1,21 @@
 
+Version 1.5.3a
+==============
+NOTE: For aggregated instructions on how to upgrade from Pi Presents Beep or Pi Presents Gapless see Readme.md
+
+This version removes the VLC video tracks. Updating the profile in the editor will delete tracks of this type without warning from the profile but will keep any track references to them.
+
+The Audio Tracks volume range has changed from -60>0 to 0>100
+
 
 Version 1.5.2b  26/8/2023
 ========================
-AGGREGATED UPDATES FROM VERSION 1.4 (BEEP)
-
 /pp_config/display.cfg has been modified. If you have modified display.cfg then edit this new version to include your changes
+
 /pp_config/audio.cfg has been radically modified. If you have modified audio.cfg for USB or bluetooth then edit this new version to include your changes. The pulseaudio sink names appear to be different for different models of Pi but I thnk are the same for individual boards. If I am incorrect then please contact me and edit the file as described in the file.
 
-It will be necessary to update the profiles to version 1.5.2. The update will happen automatically if you edit the profile. I recommend making a backup of all profile directories before editing them.
+This version requires RPI OS Bullseye
 
-This version removes the vlc based video tracks. Updating the profile in the editor will not delete the tracks of this type but there will be an error when the profile is run. You should create new mpv video tracks to replace the vlc tracks.
-
-The fields for mpv video tracks differ from those of VLC tracks (see Manual for details)
-
-This version removes the omxplayer video tracks and uzbl based web tracks. Updating the profile in the editor from an earlier issue of Beep will delete tracks of this type without warning from the profile but will keep any track references to them.
-
-This version uses RPi OS Bullseye out of the box. It does not require fkms.
-
-This version requires the legacy camera library if using the camera. Run sudo raspi-config and select legacy camera.
-
-If Pi Presents is run under a User other than pi then file paths in some configuration files will require editing. Including but not limited to web.cfg, editor.cfg, examples.sh
 
 
 Version 1.5.1a  10/8/2022

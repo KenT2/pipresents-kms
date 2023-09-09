@@ -135,57 +135,66 @@ to display full screen and to disable screen blanking
 Now read the manual to try other examples.
 
 
-Updating Pi Presents from earlier Versions of Pi Presents Beep or Pi Presents Gapless
+Updating Pi Presents from Pi Presents Beep or Pi Presents Gapless
 ======================================================================================
-Install new libraries:
 
-      sudo pip3 install mpv
+Backup the directories /home/pi/pipresents and /home/pi/pp_home, you will need to refer to them.
 
-Install Python 3 version of some packages:
+Pi Presents KMS requires Raspberry Pi OS Bullseye or later so first install the operating system on a new SD card and then follow the instructions above for a new install of Pi Presents KMS.
 
-      sudo apt-get install python3-pil.imagetk
-      sudo pip3 install evdev
+You can also install the example profiles for KMS from the pipresents-kms-examples repository
+
+Copy any files you have made or changed from old to new /pipresents/pp_io_config directory.
+
+Copy any files you have made or changed from old to new /pipresents/pp_io_plugins directory.
+
+Copy any files you have made or changed from old to new /pipresents/pp_track_plugins directory.
+
+Do not copy across /pipresents/pp_config/pp_editor.cfg
+
+If you have modified it, make the edits to  /pipresents/pp_config/pp_web.cfg file. If you are using a username other than pi then edit the appropriate fields.
+
+Copy any other files you have changed in /pipresents/pp_config/ - pp_email.cfg, pp_oscmonitor.cfg, pp_oscremote.cfg
+
+This version requires the legacy camera library if using the camera. Run sudo raspi-config and select legacy camera.
       
-The Python 2 versions of these packages can be left installed
-
-Open a terminal window in the /home/pi and type:
-
-         wget https://github.com/KenT2/pipresents-kms/tarball/master -O - | tar xz
-
-There should now be a directory 'KenT2-pipresents-kms-xxxx' in the /home/pi directory
-
-Rename the existing pipresents directory to old-pipresents
-
-Rename the new directory to pipresents.
-
-Copy any files you have changed from old to new /pipresents/pp_config directory.
-Copy any files you have changed from old to new /pipresents/pp_io_config directory.
-Copy any files you have changed from old to new /pipresents/pp_io_plugins directory.
-Copy any files you have used or changed from old to new /pipresents/pp_track_plugins directory. Note: since 1.4.1b track plugins have been moved to their examples
+This version does not require 256MB GPU Mem. Use the out of the box 76MB.
 
 
-Getting examples for this version.
-----------------------------------
+For upgrade from Beep:
 
-Examples are in the github repository pipresents-kms-examples.
+      * If you have modified it, make the edits to the new format /pipresents/pp_config/pp_display.cfg file.
 
-Rename the existing pp_home directory to old_pp_home.
+      * If you have modified it, make the edits to the new format /pipresents/pp_config/pp_audio.cfg file.For KMS the pulseaudio sink names are different for different models of Pi but I believe are the same for individual boards. If I am incorrect then please contact me and edit the file as described in the file.
+      
 
-Open a terminal window in your home directory and type:
+For upgrade from Gapless:
 
-         wget https://github.com/KenT2/pipresents-kms-examples/tarball/master -O - | tar xz
+      * There is a new /pipresents/pp_config/pp_display.cfg file. This replaces use of the --screensize command line option and allows change to the size of the development window.
 
-There should now be a directory 'KenT2-pipresents-kms-examples-xxxx' in the /home/pi directory.
+      * There is a new /pipresents/pp_config/pp_audio.cfg file. This requires editing to allow use USB or Bluetooth devices. For KMS the pulseaudio sink names are different for different models of Pi but I believe are the same for individual boards. If I am incorrect then please contact me and edit the file as described in the file. 
 
-rename /home/<username>/pp-home to ...old_pp_home
 
-Open the directory and move the 'pp_home' directory and its contents to the /home/<username> directory.
 
-These examples are compatible with the version of Pi Presents you have just downloaded. In addition you can update profiles from earlier 1.4.x or 1.3.x versions by simply opening them in the editor (make a backup copy first).
 
-You can use the update>update all menu option of the editor to update all profiles in a single directory at once.
 
-Lastly you will need to do some manual updating of some of the field values as specified in ReleaseNotes.txt. Start at the paragraph in ReleaseNotes.txt that introduces your previous version and work forwards
+Updating Profiles for use in PI Presents KMS
+--------------------------------------------
+
+Copy the pp_home directory from your backup to the home directory of your SD card.
+
+When you open a profile using the editor it will be updated from Beep or Gapless versions. You can use the update>update all menu option of the editor to update all profiles in a single directory at once.
+
+You will now need to make the following manual modifications:
+
+      * Video tracks using omxplayer are now removed and will be deleted from the profile by the update. Any reference to them wil be retained.  You will need to create new equivalent tracks using the MPV Video track.
+
+      * VLC Video tracks using VLC Player are now removed and will be deleted from the profile by the update. Any reference to them wil be retained.  You will need to create new equivalent tracks using the MPV Video track. 
+
+      * Web tracks that used the UZBL browser are now removed and will be deleted from the profile by the update. Any reference to them wil be retained. You will need to create new equivalent tracks using the Chrome Web track.
+
+      * For Audio tracks the Audio Player volume range is now 0>100 instead of -60>0
+      
 
 
 

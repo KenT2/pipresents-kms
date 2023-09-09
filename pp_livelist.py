@@ -11,8 +11,8 @@ from pp_livelistfetcher import LiveListFetcher
 
 class LiveList(object):
 
-    video_player='vlc'
-    # video_player='video'  #uncomment to use omxplayer in liveshow or artliveshow
+    video_player='mpv'
+
 
     def __init__(self,sequence):
         self.mon=Monitor()

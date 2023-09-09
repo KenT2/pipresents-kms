@@ -6,7 +6,7 @@ It is aimed at primarily at  musems, exhibitions and galleries
 but has many other applications including digital signage
 
 Version 1.5 [pipresents-kms]
-Copyright 2012/2013/2014/2015/2016/2017/2018/2019/2020/2021/2022, Ken Thompson
+Copyright 2012/2013/2014/2015/2016/2017/2018/2019/2020/2021/2022/2023, Ken Thompson
 See github for licence conditions
 See readme.md and manual.pdf for instructions.
 """
@@ -58,8 +58,8 @@ class PiPresents(object):
     def __init__(self):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
-        self.pipresents_issue="1.5.2"
-        self.pipresents_minorissue = '1.5.2b'
+        self.pipresents_issue="1.5.3"
+        self.pipresents_minorissue = '1.5.3a'
 
         StopWatch.global_enable=False
         
@@ -363,8 +363,19 @@ class PiPresents(object):
         self.bp=BeepPlayer()
         self.bp.init(self.pp_home,self.pp_profile)
         
-        #init vibe player
-        self.vp=VibePlayer()
+        if self.options['vibes'] is True:
+            # test I2C is enabled
+            com=['sudo' ,'raspi-config' ,'nonint' ,'get_i2c']
+            result= check_output(com,universal_newlines=True)
+            #print ('I2C-pp',result)
+            if int(result) == 1:
+                #print ('pp-error')
+                self.mon.err(self,"\nI2C interface must be enabled for Vibes")
+                self.end('error',"I2C interface must be enabled for Vibes")
+            else:
+                #init vibe player
+                #print ('pp _init vibeplayer')
+                self.vp=VibePlayer()
              
         # initialise the I/O plugins by importing their drivers
         self.ioplugin_manager=IOPluginManager()

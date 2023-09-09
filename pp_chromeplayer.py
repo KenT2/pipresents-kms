@@ -305,7 +305,7 @@ class ChromePlayer(Player):
                 self.driver = webdriver.Chrome(options=self.chrome_options)
                 return
             except Exception as e:
-                #print ("Failed to open Chromium", e, e.__class__,tries)
+                print ("Failed to open Chromium", e, e.__class__,tries)
                 tries-=1
 
 

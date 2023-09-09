@@ -37,9 +37,10 @@ class PPWebEditor(App):
         # ***************************************
         # INIT
         # ***************************************
-        self.editor_issue="1.5.2"
+        self.editor_issue="1.5.3"
         self.force_update= False
-
+        self.log=True
+        
         # get directory holding the code
         self.editor_dir=sys.path[0]
 
@@ -211,8 +212,6 @@ class PPWebEditor(App):
 
         track_new_mpv_menu = gui.MenuItem('MPV Video',width=120, height=30)
         track_new_mpv_menu.set_on_click_listener(self.new_mpv_track)
-        track_new_vlc_menu = gui.MenuItem('VLC Video',width=120, height=30)
-        track_new_vlc_menu.set_on_click_listener(self.new_vlc_track)
         track_new_audio_menu = gui.MenuItem('Audio',width=120,height=30)
         track_new_audio_menu.set_on_click_listener(self.new_audio_track)
         track_new_image_menu = gui.MenuItem( 'Image',width=120, height=30)
@@ -227,7 +226,6 @@ class PPWebEditor(App):
         track_new_menu_menu.set_on_click_listener(self.new_menu_track)
 
         track_new_menu.append(track_new_mpv_menu)
-        track_new_menu.append(track_new_vlc_menu)
         track_new_menu.append(track_new_audio_menu)
         track_new_menu.append(track_new_image_menu)
         track_new_menu.append(track_new_chrome_menu)        
@@ -479,7 +477,8 @@ class PPWebEditor(App):
             return
             
         showlist_file = dir_path + os.sep + "pp_showlist.json"
-        #print 'open profile',showlist_file
+        if self.log:
+            print ('LOG: Open Profile',showlist_file)
         if os.path.exists(showlist_file) is False:
             OKDialog('Open Profile',"Not a Profile: " + dir_path).show(self)
             return
@@ -1042,9 +1041,6 @@ class PPWebEditor(App):
 
     def new_message_track(self,widget):
         self.new_track(PPdefinitions.new_tracks['message'],None)
-
-    def new_vlc_track(self,widget):
-        self.new_track(PPdefinitions.new_tracks['vlc'],None)
         
     def new_mpv_track(self,widget):
         self.new_track(PPdefinitions.new_tracks['mpv'],None)
@@ -1256,6 +1252,8 @@ class PPWebEditor(App):
         # sef.pp_profile_dir already set
         self.profile_name=self.pp_profile_dir.split(os.sep)[-1]
         self.backup_profile()
+        if self.log:
+            print ('\nLOG: Updating Profile',self.profile_name)
         self.update_medialists()   # medialists and their tracks
         self.update_shows()         #shows in showlist, also creates menu tracks and moves io_config for 1.2>1.3
         
@@ -1268,6 +1266,8 @@ class PPWebEditor(App):
         ifile  = open(self.pp_profile_dir + os.sep + "pp_showlist.json", 'r')
         sdict = json.load(ifile)
         ifile.close()
+        if self.log:
+            print('LOG: Updating showlist',self.pp_profile_dir + os.sep + "pp_showlist.json")
         shows = sdict['shows']
         if 'issue' in sdict:
             profile_version_string= sdict['issue']
@@ -1359,7 +1359,8 @@ class PPWebEditor(App):
         # UPDATE MEDIALISTS AND THEIR TRACKS
         for this_file in os.listdir(self.pp_profile_dir):
             if this_file.endswith(".json") and this_file not in  ('pp_showlist.json','schedule.json'):
-                # self.mon.log (self,"Updating medialist " + this_file)
+                if self.log:
+                    print("LOG: Updating medialist " + this_file)
                 # open a medialist and update its tracks
                 ifile  = open(self.pp_profile_dir + os.sep + this_file, 'r')
                 tracks = json.load(ifile)['tracks']
@@ -1392,7 +1393,8 @@ class PPWebEditor(App):
                 # print '\nafter update',replacement_track
                 replacement_tracks.append(copy.deepcopy(replacement_track))
             else:
-                OKDialog("Update",track_type+" - Deprecated track type has been omitted from update",width=400,height=200).show(self)
+                if self.log:
+                    print("LOG: "+track_type+" track type has been omitted from update")
                 
         return replacement_tracks
 
@@ -1459,7 +1461,7 @@ class Options(AdaptableDialog):
             config.set('config','offset','')
         else:
             config.set('config','home',os.path.expanduser('~')+'/pp_home')
-            config.set('config','media',os.path.expanduser('~'))
+            config.set('config','media',os.path.expanduser('~')+'/pp_home')
             config.set('config','offset','')
         with open(self.options_file, 'w') as config_file:
             config.write(config_file)

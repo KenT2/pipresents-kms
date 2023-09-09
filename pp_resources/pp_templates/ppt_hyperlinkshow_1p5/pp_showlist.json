@@ -1,5 +1,5 @@
 {
- "issue": "1.5.2",
+ "issue": "1.5.3",
  "shows": [
   {
    "audio-speaker": "stereo",
@@ -68,16 +68,7 @@
    "track-text-y": "40",
    "track-timeout": "0",
    "transition": "cut",
-   "type": "hyperlinkshow",
-   "vlc-aspect-mode": "stretch",
-   "vlc-audio": "default",
-   "vlc-freeze-at-end": "yes",
-   "vlc-freeze-at-start": "no",
-   "vlc-image-duration": "5",
-   "vlc-layer": "1",
-   "vlc-other-options": "",
-   "vlc-volume": "100",
-   "vlc-window": "showcanvas 200+200+400*300"
+   "type": "hyperlinkshow"
   },
   {
    "background-colour": "#000000",

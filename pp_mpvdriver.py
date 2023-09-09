@@ -197,7 +197,7 @@ class MPVDriver(object):
             if self.user_pause is False and self.player.time_remaining<0.4:
                 self.player.pause=True
                 self.frozen_at_end=True
-                print('paused at end at',position)
+                # print('paused at end at',position)
                 self.state='show-pauseatend'
                 return
             else:
@@ -208,7 +208,7 @@ class MPVDriver(object):
             if self.freeze_at_end == 'no':
                 if position==None:
                     self.player.stop()
-                    print ('ended with no pause',position)
+                    # print ('ended with no pause',position)
                     self.state='show-niceday'
                     self.frozen_at_end=False
                     self.player.video=False
@@ -224,7 +224,7 @@ class MPVDriver(object):
             
 
     def close(self):
-        print ('in close')
+        #print ('in close')
         self.player.video=False
         self.player.pause=False
         self.player.stop()

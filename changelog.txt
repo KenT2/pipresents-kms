@@ -1,6 +1,19 @@
+CHANGES FOR 1.5.3a  9/9/2023
+===================================
+enhanced - Readme.md updated for Bullseye
+enhanced - Readme.md has instructions for updating profiles from Beep or Gapless
+modified - Audio Player Volume range is now 0->100 instead of -60->0. Same as MPV video
+enhanced - web_editor now sets initial options correctly if user is not pi.
+enhanced - web editor has a terminal window log showing tracks deleted on update
+fixed - crash on start if I2C interface is not enabled.
+fixed - default menu thumbnail for mpv track
+fixed - videos in liveshow now use mpv video player
+EXAMPLES - DRV2605 changed mpv output to A/V not USB
 
 
-CHANGES FOR 1.5.2b  2/86/2023
+
+
+CHANGES FOR 1.5.2b  2/8/2023
 ===================================
 deleted - support for the A/V display has been discontinued. Use a HDMI to A/V convertor
 enhanced - Pi Presents can now use 3 displays on a Pi4 dsi0, hdmi0, hdmi1
@@ -72,7 +85,7 @@ fixed - crash when validating artliveshow or artmediashow, raises profile versio
 
 CHANGES FOR 1.4.5f 25/6/2021
 ============================
-enhanced - pigpio I/O plugin. Based on pigpio by Joan. More responsve especially when many VLV tracks are playing
+enhanced - pigpio I/O plugin. Based on pigpio by Joan. More responsve especially when many VLC tracks are playing
 fixed - crash if VLC window value is not correct
 fixed - all shows shutdown if a required monitor is not connected
 
@@ -162,7 +175,6 @@ enhanced - emails now have date field supplied for those ISP's that do not add i
 
 CHANGES FOR 1.4.4b 20/3/2020
 ============================
-Code
 enhanced - Display setup for Pi4 is now fully automatic  including rotation and variation in position of the monitors
 enhanced - On Pi3 display setup is semi-automatic. It requires the monitor to be rotated in /boot/config.txt and in pp_display.cfg  
 enhanced - On Pi4 both displays can be touchscreens (on Pi3 1), requires configuration in pp_display.cfg.

@@ -3,6 +3,7 @@ import copy
 from pp_utils import Monitor
 import time
 from DRV2605.DRV2605_lib import DRV2605, PlayWaveform, WaitMillis
+from subprocess import call, check_output
 
 class VibePlayer(object):
 

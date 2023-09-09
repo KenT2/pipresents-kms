@@ -1,5 +1,5 @@
 {
- "issue": "1.5.2",
+ "issue": "1.5.3",
  "shows": [
   {
    "admin-colour": "#ffffff",
@@ -88,16 +88,7 @@
    "trigger-start-param": "pp-play",
    "trigger-start-type": "input",
    "trigger-wait-text": "Waiting for Trigger (Return)....",
-   "type": "mediashow",
-   "vlc-aspect-mode": "stretch",
-   "vlc-audio": "default",
-   "vlc-freeze-at-end": "yes",
-   "vlc-freeze-at-start": "no",
-   "vlc-image-duration": "5",
-   "vlc-layer": "1",
-   "vlc-other-options": "",
-   "vlc-volume": "100",
-   "vlc-window": "showcanvas 200+200+400*300"
+   "type": "mediashow"
   },
   {
    "background-colour": "#000000",
