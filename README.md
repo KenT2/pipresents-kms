@@ -1,25 +1,22 @@
-PI PRESENTS  - Version 1.5.2 (KMS)
-============================
+PI PRESENTS  - Version 1.5.3 (KMS)
+==================================
 
-This repository contains an experimental version of Pi Presents which now uses the drm/kms video system. In this issue the VLC based videoplayer is replaced with a MPV based video player which integrates better into Pi Presents.
+There are two current versions of Pi Presents. ‘Gapless’ is the current stable version which is not being developed except for bug fixes. 'KMS' is currently in a public Beta Test phase and soon will become the stable version. It works on RPi OS Bullseye and has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
 
-Apart from a working camera interface this issue has all the features of PI Presents Beep. Use it if you want the enhanced security of Bullseye and are happy to use Bleeding Edge software.
-
+'Beep' was an unsuccesful version of Pi Presents in which an attempt was made to replace omxplayer with VLC. While VLC worked with Buster it proved impossible to embed its display into Pi Presents under the new DRM/KMS display system that was introduced in Bullseye.
 
 TO INSTALL PIPRESENTS-KMS
-=============================
-
+-------------------------
 Read the 'Installing Pi Presents KMS' section below.
 
 
+TO UPGRADE FROM EARLIER VERSIONS OF PIPRESENTS BEEP OR GAPLESS
+--------------------------------------------------------------
+Read the 'Updating Pi Presents from Pi Presents Beep or Pi Presents Gapless' section below.
 
-TO UPGRADE FROM EARLIER VERSIONS OF PIPRESENTS-BEEP
-======================================================
-To upgrade follow the instructions in the 'Updating Pi Presents' section below. Then follow any instructions in the Release Notes.
 
-
-PI PRESENTS
-===========
+WHAT IS PI PRESENTS
+===================
 
 Pi Presents is a toolkit for producing interactive multimedia applications for museums, visitor centres, and more.
 
@@ -29,22 +26,18 @@ Pi Presents is different, it is stand alone, multi-media, highly interactive, di
 
 Being so flexible Pi Presents needs to be configured for your application. This is achieved using a simple to use graphical editor and needs no Python programming. There are numerous tutorial examples and a comprehensive manual.
 
-There are two current versions of Pi Presents. ‘Gapless’ is the current stable version which is not being developed except for bug fixes. 'Beep' is a continuation of Gapless which is being developed to add new features.
-
 For a detailed list of applications and features see here:
 
           https://pipresents.wordpress.com/features/
 
-
-
 Licence
-=======
+-------
 
 See the licence.md file. Pi Presents is Careware to help support a small museum charity http://www.museumoftechnology.org.uk  Particularly if you are using Pi Presents in a profit making situation a donation would be appreciated.
 
 
-Installing Pi Presents KMS
-===============================
+INSTALLING PI PRESENTS KMS
+==========================
 
 The full manual in English is here https://github.com/KenT2/pipresents-kms/blob/master/manual.pdf. It will be downloaded with Pi Presents.
 
@@ -52,20 +45,18 @@ The full manual in English is here https://github.com/KenT2/pipresents-kms/blob/
 Requirements
 -------------
 
-	* must use the latest version of Raspbian Bullseye with Desktop (not the Lite version)
+	* must use the latest version of RPi OS Bullseye with Desktop (not the Lite version)
 	* must be run from the PIXEL desktop.
-	* can be installed and run from any user that is created with RPI OS utilities
+	* can be installed and run from any user that is created with RPi OS utilities
 	* must have Python 3 installed (which RPi OS does)
-	* should use a clean install of Raspberry Pi OS, particularly if you intend to use GPIO
+	* should use a clean install of RPi OS, particularly if you intend to use GPIO
 
-Set the GPU Memory size to 256MB
----------------------------------
-Using the Raspbian menu preferences>raspberry pi configuration>performance, increase the GPU Memory to 256. On a Pi Zero this may not be possible due to the small amount of RAM.
+Install RPi OS Bullseye
+-----------------------
 
+Image a SD Card with RPi OS Bullseye with desktop (32 Bit)
 
-Ensure Raspbian is up to date.
--------------------------------
-Pi Presents MUST have the latest version of RPi OS, get this by
+Ensure the OS is up to date:
 
          sudo apt update
          sudo apt full-upgrade
@@ -135,14 +126,12 @@ to display full screen and to disable screen blanking
 Now read the manual to try other examples.
 
 
-Updating Pi Presents from Pi Presents Beep or Pi Presents Gapless
+UPDATING PI PRESENTS FROM PI PRESENTS BEEP OR PI PRESENTS GAPLESS
 ======================================================================================
 
-Backup the directories /home/pi/pipresents and /home/pi/pp_home, you will need to refer to them.
+Backup the directories /home/pi/pipresents and /home/pi/pp_home. You will need to copy some of the files to a new SD card.
 
 Pi Presents KMS requires Raspberry Pi OS Bullseye or later so first install the operating system on a new SD card and then follow the instructions above for a new install of Pi Presents KMS.
-
-You can also install the example profiles for KMS from the pipresents-kms-examples repository
 
 Copy any files you have made or changed from old to new /pipresents/pp_io_config directory.
 
@@ -156,25 +145,21 @@ If you have modified it, make the edits to  /pipresents/pp_config/pp_web.cfg fil
 
 Copy any other files you have changed in /pipresents/pp_config/ - pp_email.cfg, pp_oscmonitor.cfg, pp_oscremote.cfg
 
-This version requires the legacy camera library if using the camera. Run sudo raspi-config and select legacy camera.
+This version requires the legacy camera library. If using the camera run sudo raspi-config and select legacy camera.
       
-This version does not require 256MB GPU Mem. Use the out of the box 76MB.
-
 
 For upgrade from Beep:
 
       * If you have modified it, make the edits to the new format /pipresents/pp_config/pp_display.cfg file.
 
-      * If you have modified it, make the edits to the new format /pipresents/pp_config/pp_audio.cfg file.For KMS the pulseaudio sink names are different for different models of Pi but I believe are the same for individual boards. If I am incorrect then please contact me and edit the file as described in the file.
+      * If you have modified it, make the edits to the new format /pipresents/pp_config/pp_audio.cfg file.For KMS the pulseaudio sink names are different for different models of Pi but I believe do not differ between individual boards. If I am incorrect then please contact me and edit the file as described in the file.
       
 
 For upgrade from Gapless:
 
       * There is a new /pipresents/pp_config/pp_display.cfg file. This replaces use of the --screensize command line option and allows change to the size of the development window.
 
-      * There is a new /pipresents/pp_config/pp_audio.cfg file. This requires editing to allow use USB or Bluetooth devices. For KMS the pulseaudio sink names are different for different models of Pi but I believe are the same for individual boards. If I am incorrect then please contact me and edit the file as described in the file. 
-
-
+      * There is a new /pipresents/pp_config/pp_audio.cfg file. This requires editing to allow use USB or Bluetooth devices. For KMS the pulseaudio sink names are different for different models of Pi but I believe do not differ between individual boards. If I am incorrect then please contact me and edit the file as described in the file. 
 
 
 
@@ -187,11 +172,11 @@ When you open a profile using the editor it will be updated from Beep or Gapless
 
 You will now need to make the following manual modifications:
 
-      * Video tracks using omxplayer are now removed and will be deleted from the profile by the update. Any reference to them wil be retained.  You will need to create new equivalent tracks using the MPV Video track.
+      * Video tracks using omxplayer are now removed and will be deleted from the profile by the update. Any reference to them will be retained.  You will need to create new equivalent tracks using the MPV Video track.
 
-      * VLC Video tracks using VLC Player are now removed and will be deleted from the profile by the update. Any reference to them wil be retained.  You will need to create new equivalent tracks using the MPV Video track. 
+      * VLC Video tracks using VLC Player are now removed and will be deleted from the profile by the update. Any reference to them will be retained.  You will need to create new equivalent tracks using the MPV Video track. 
 
-      * Web tracks that used the UZBL browser are now removed and will be deleted from the profile by the update. Any reference to them wil be retained. You will need to create new equivalent tracks using the Chrome Web track.
+      * Web tracks that used the UZBL browser are now removed and will be deleted from the profile by the update. Any reference to them will be retained. You will need to create new equivalent tracks using the Chrome Web track.
 
       * For Audio tracks the Audio Player volume range is now 0>100 instead of -60>0
       
@@ -202,7 +187,7 @@ Bug Reports and Feature Requests
 ================================
 I am keen to develop Pi Presents further and would welcome bug reports and ideas for additional features and uses.
 
-Please use the Issues tab on Github https://github.com/KenT2/pipresents-kms/issues.
+Please use the Issues tab on Github https://github.com/KenT2/pipresents-kms/issues or contact me on https://pipresents.wordpress.com/
 
 For more information on how Pi Presents is being used, Hints and Tips on how to use it and all the latest news hop over to the Pi Presents website https://pipresents.wordpress.com/
 

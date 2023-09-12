@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 """
-Pi Presents is a toolkit for construcing and deploying multimedia interactive presentations
+Pi Presents is a toolkit for constructing and deploying multimedia interactive presentations
 on the Raspberry Pi.
 It is aimed at primarily at  musems, exhibitions and galleries
 but has many other applications including digital signage
@@ -601,12 +601,17 @@ class PiPresents(object):
             return
             
         if fields[0]=='vibe':
-            status,message=self.vp.play_show_vibe(command_text)
-            if status == 'error':
-                self.mon.err(self,message)
-                self.end('error',message)
+            if self.options['vibes'] is True:
+                status,message=self.vp.play_show_vibe(command_text)
+                if status == 'error':
+                    self.mon.err(self,message)
+                    self.end('error',message)
+                    return
                 return
-            return
+            else:
+                self.mon.err(self,'Enable vibes using --vibes command line option')
+                self.end('error','')
+                return
             
             
         if fields[0]=='backlight':
