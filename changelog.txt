@@ -1,3 +1,9 @@
+CHANGES FOR 1.5.3b  19/9/2023
+===================================
+fixed - videoplayout example and manual modified for mpv video tracks
+fixed - track plugins now work with chrome and mpv tracks.
+
+
 CHANGES FOR 1.5.3a  9/9/2023
 ===================================
 enhanced - Readme.md updated for Bullseye

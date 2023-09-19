@@ -36,12 +36,12 @@ class TrackPluginManager(object):
     # called by players to load a plugin during load
     # load_plugin is expected to modify track file and load any Tkinter objects to the canvas hiding them
     def load_plugin(self,track_file,plugin_cfg):
-
+        #print ('\n\nload_plugin',track_file,plugin_cfg)
         # checks existence of and reads the plugin config file
         plugin_cfg_file= self.complete_path(plugin_cfg)
         if not os.path.exists(plugin_cfg_file):
             return 'error','plugin configuration file not found '+ plugin_cfg_file,''
-        # print (plugin_cfg_file)
+        #print (plugin_cfg_file)
         
         self.plugin_params=self.read(plugin_cfg_file)
         # print self.plugin_params

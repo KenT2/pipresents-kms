@@ -1,3 +1,6 @@
+Version 1.5.3b  19/9/2023
+========================
+MPV video tracks do not allow display on a monitor other than the one used for the Show. Example pp_traccckplugin_1p5 and manual have been modified.
 
 Version 1.5.3a
 ==============
@@ -6,6 +9,7 @@ NOTE: For aggregated instructions on how to upgrade from Pi Presents Beep or Pi 
 This version removes the VLC video tracks. Updating the profile in the editor will delete tracks of this type without warning from the profile but will keep any track references to them.
 
 The Audio Tracks volume range has changed from -60>0 to 0>100
+
 
 
 Version 1.5.2b  26/8/2023

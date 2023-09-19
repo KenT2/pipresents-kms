@@ -180,6 +180,8 @@ You will now need to make the following manual modifications:
 
       * For Audio tracks the Audio Player volume range is now 0>100 instead of -60>0
       
+      * Videoplayout uses a new method compatible with MPV. See manual an pp_videoplayout_1p5 example
+      
 
 
 

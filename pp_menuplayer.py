@@ -688,7 +688,7 @@ class MenuPlayer(Player):
             else:
                 bullet=self.pp_dir+os.sep+'pp_resources'+os.sep+'bullet.png'
                 if os.path.exists(bullet) is True:
-                    self.mon.warn(self,'Default bullet used for '+self.medialist.selected_track()['title'])
+                    #self.mon.warn(self,'Default bullet used for '+self.medialist.selected_track()['title'])
                     self.pil_image=Image.open(bullet)
                 else:
                     self.pil_image=None

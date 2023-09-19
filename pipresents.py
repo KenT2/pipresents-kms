@@ -59,7 +59,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.3"
-        self.pipresents_minorissue = '1.5.3a'
+        self.pipresents_minorissue = '1.5.3b'
 
         StopWatch.global_enable=False
         
