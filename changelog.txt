@@ -1,3 +1,9 @@
+CHANGES FOR 1.5.3c  8/10/2023
+===================================
+enhanced - Editor now has show>view backup menu item whichdisplays the paramters of the backup made when the profile issue was last updated.
+fixed - mpv video tracks now work with video only tracks
+fixed - mpv video tracks now more gapless
+
 CHANGES FOR 1.5.3b  19/9/2023
 ===================================
 fixed - videoplayout example and manual modified for mpv video tracks

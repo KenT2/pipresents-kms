@@ -105,7 +105,7 @@ class Player(object):
         # show_x_content moved to just before ready_callback to improve flicker.
         self.show_x_content()
   
-        #ready callback hides and closes players from previous track, also displays show background
+        #ready callback hides and closes player from previous track, also displays show background
         if self.ready_callback is not None:
             self.ready_callback(self.enable_show_background)
 

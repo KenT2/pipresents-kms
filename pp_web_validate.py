@@ -6,6 +6,69 @@ from remi_plus import AdaptableDialog
 from pp_utils import parse_rectangle
 from pp_timeofday import TimeOfDay
 
+class ViewBackup(AdaptableDialog):
+
+    def __init__(self):
+        self.text=''
+        super(ViewBackup, self).__init__('Backup','',width=600,height=700,confirm_name='Done')
+        self.textb = gui.TextInput(width=550,height=600,single_line=False)
+        self.append_field(self.textb,'text')
+
+    def insert(self,text):
+        self.text +=text
+        self.textb.set_value(self.text) 
+
+    @gui.decorate_event
+    def confirm_dialog(self,emitter):
+          self.hide()
+          
+    def view_tracks_backup(self,pp_profile_dir,medialist):
+        if medialist !='':
+            backup_dir=pp_profile_dir.replace('pp_profiles','pp_profiles.bak')
+            medialist_path=backup_dir+os.sep+medialist
+            #print('tracks backup',medialist_path)
+            if os.path.exists(medialist_path):
+                ifile  = open(medialist_path, 'r')
+                mdict = json.load(ifile)
+                ifile.close()
+                self.insert('\nTRACKS\n=======\n')
+                self.insert('Backup Version: '+mdict['issue'])
+                for i in mdict['tracks']:
+                    self.insert_items(i,'track-ref')
+            else:
+                self.insert('\nBackup medialist not found: '+medialist_path+'\n')
+                
+    def view_show_backup(self,pp_profile_dir,show_params):
+        backup_dir=pp_profile_dir.replace('pp_profiles','pp_profiles.bak')
+        showlist_path=backup_dir+os.sep+'pp_showlist.json'
+        #print('show backup',showlist_path)
+        show_ref=show_params['show-ref']
+        if os.path.exists(showlist_path):
+            ifile  = open(showlist_path, 'r')
+            mdict = json.load(ifile)
+            ifile.close()
+            self.insert('\nSHOW\n======\n')
+            self.insert('Backup Version: '+mdict['issue'])
+            for show in mdict['shows']:
+                if show['show-ref']==show_ref:
+
+                    self.insert_items(show,'show-ref')            
+        else:
+            self.insert('\nBackup showlist not found: '+showlist_path+'\n')            
+    
+    def insert_items(self,item,ref):
+        self.insert('\n----------------------------------------------------------------\n')
+        self.insert('\n'+item['type']+' "'+item['title']+'" ['+item[ref]+']'+'\n')
+        for field in item:
+            if '\n' in item[field]:
+                self.insert(field+' = \n')
+                lines=item[field].split('\n')
+                for line in lines:
+                    self.insert(line+'\n')
+            else:
+                self.insert (field+' = '+item[field]+'\n')
+                
+               
 
 class Validator(AdaptableDialog):
 

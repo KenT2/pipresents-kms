@@ -142,10 +142,10 @@ class MPVPlayer(Player):
                     return
                     
             if not self.am.sink_connected(self.mpv_sink):
-                self.mon.err(self,self.mpv_audio +' audio device not connected\n\n    sink: '+ self.mpv_sink)
+                self.mon.err(self,'"'+self.mpv_audio +'" display or audio device not connected\n\n    Expected sink is: '+ self.mpv_sink)
                 self.play_state='load-failed'
                 if self.loaded_callback is not  None:
-                    self.loaded_callback('error','audio device not connected')
+                    self.loaded_callback('error','display or audio device not connected')
                     return
                     
             self.add_option('ao','pulse')
@@ -176,7 +176,8 @@ class MPVPlayer(Player):
         else:
             self.max_volume=100
             
-        self.volume=min(self.mpv_volume,self.max_volume)
+        self.initial_volume=min(self.mpv_volume,self.max_volume)
+        self.volume=self.initial_volume
         
         
         # SUBTITLES
@@ -189,8 +190,7 @@ class MPVPlayer(Player):
         # VIDEO WINDOW
         # size and position of frame containing the video
         # user needs to set this to match the videos aspect ratio
-
-            
+   
         status,message,self.x,self.y,self.width,self.height=self.parse_mpv_video_window(self.mpv_window)
         if status=='error':
             return status,message
@@ -269,7 +269,13 @@ class MPVPlayer(Player):
                 self.loaded_callback('error',message)
                 return
 
-
+        if ':' in track:
+            self.mon.err(self,"Cannot play a stream: "+ track)
+            self.play_state='load-failed'
+            if self.loaded_callback is not  None:
+                self.loaded_callback('error','track file not found: '+ track)
+                return
+                
         # check file exists if not a mrl
         if not ':'in track:        
             if not os.path.exists(track):
@@ -280,7 +286,7 @@ class MPVPlayer(Player):
                         return
 
 
-        self.mpvdriver = MPVDriver(self.root,self.canvas,self.freeze_at_start,self.freeze_at_end)
+        self.mpvdriver = MPVDriver(self.root,self.canvas,self.freeze_at_start,self.freeze_at_end,self.background_colour)
         
 
 
@@ -301,9 +307,9 @@ class MPVPlayer(Player):
 
         self.mon.trace(self,'')
 
-        #  do animation at start and ready_callback
+        #  do animation at start and ready_callback which closes+hides the previous track
         Player.pre_show(self)
-        self.set_volume(self.volume)
+        
         # start show state machine
         self.start_state_machine_show()
 
@@ -445,16 +451,12 @@ class MPVPlayer(Player):
             
     def start_state_machine_show(self):
         if self.play_state == 'loaded':
-            # print '\nstart show state machine ' + self.play_state
             self.play_state='showing'
-            #self.freeze_signal=False     # signal that user has pressed stop
-            #self.must_quit_signal=False
-            # show the track and content
-            self.mpvdriver.show()
+            
+            # show the track
+            self.mpvdriver.show(self.initial_volume)
             self.mon.log (self,'>showing track from show Id: '+ str(self.show_id))  
-            self.set_volume(self.volume)
             # and start polling for state changes
-            # print 'start show state machine show'
             self.tick_timer=self.canvas.after(0, self.show_state_machine)
             """
             # race condition don't start state machine as unload in progress
@@ -650,7 +652,7 @@ class MPVPlayer(Player):
 
     # go after freeze at start
     def go(self):
-        reply=self.mpvdriver.go()
+        reply=self.mpvdriver.go(self.initial_volume)
         if reply == 'go-ok':
             return True
         else:
@@ -738,10 +740,10 @@ class MPVPlayer(Player):
     def parse_mpv_video_window(self,line):
         words=line.split()
         if len(words) not in (1,2):
-            return 'error','bad mpv video window form '+line,''
+            return 'error','bad mpv video window form '+line,0,0,0,0
             
         if words[0] not in ('display','showcanvas'):
-            return 'error','Bad mpv Window option: '+line,''
+            return 'error','Bad mpv Window option: '+line,0,0,0,0
             
 
         if words[0] == 'display':
@@ -762,7 +764,7 @@ class MPVPlayer(Player):
             #pass in canvas/display width/height. Returns window width/height
             status,message,x_offset,y_offset,width,height=self.parse_dimensions(words[1],width,height)
             if status =='error':
-                return 'error',message,''
+                return 'error',message,0,0,0,0
                 
         x= x_org+x_offset
         y= y_org+y_offset

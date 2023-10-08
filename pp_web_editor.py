@@ -21,7 +21,7 @@ from pp_web_edititem import WebEditItem, ColourMap
 from pp_utils import calculate_relative_path
 from pp_medialist import MediaList
 from pp_showlist import ShowList
-from pp_web_validate import Validator
+from pp_web_validate import Validator,ViewBackup
 from pp_definitions import PPdefinitions
 from pp_oscwebconfig import OSCConfig,OSCWebEditor
 
@@ -39,7 +39,7 @@ class PPWebEditor(App):
         # ***************************************
         self.editor_issue="1.5.3"
         self.force_update= False
-        self.log=True
+        self.log=False
         
         # get directory holding the code
         self.editor_dir=sys.path[0]
@@ -90,6 +90,8 @@ class PPWebEditor(App):
         profile_open_menu.set_on_click_listener(self.open_existing_profile)
         profile_validate_menu = gui.MenuItem('Validate',width=120, height=30)
         profile_validate_menu.set_on_click_listener(self.validate_profile)
+        
+        
         profile_copy_to_menu = gui.MenuItem( 'Copy To',width=120, height=30)
         profile_copy_to_menu.set_on_click_listener(self.copy_profile)
         profile_delete_menu = gui.MenuItem( 'Delete',width=120, height=30)
@@ -144,9 +146,12 @@ class PPWebEditor(App):
         show_copy_to_menu = gui.MenuItem( 'Copy To',width=120, height=30)
         show_copy_to_menu.set_on_click_listener(self.copy_show)
         show_add_menu = gui.MenuItem( 'Add',width=120, height=30)
+        show_viewbackup_menu = gui.MenuItem('View Backup',width=120, height=30)
+        show_viewbackup_menu.set_on_click_listener(self.view_show_backup)
         show_menu.append(show_delete_menu)
         show_menu.append(show_edit_menu)
         show_menu.append(show_copy_to_menu)
+        show_menu.append(show_viewbackup_menu)
         show_menu.append(show_add_menu)
 
 
@@ -352,6 +357,7 @@ class PPWebEditor(App):
         root.append(bottom_frame)
         return root
 
+    
         
     def init(self):
         # print 'init'
@@ -484,7 +490,6 @@ class PPWebEditor(App):
             return
         self.pp_profile_dir = dir_path
         self.pp_select_offset=os.path.relpath(self.pp_profile_dir,self.pp_home_dir+os.sep+"pp_profiles"+self.pp_profiles_offset)
-        # print self.pp_select_offset
         OSCConfig.options_file=self.pp_profile_dir+ os.sep+'pp_io_config'+os.sep+'osc.cfg'
         self.osc_config_file=self.pp_profile_dir+os.sep+'pp_io_config'+os.sep+'osc.cfg'
 
@@ -777,8 +782,17 @@ class PPWebEditor(App):
         self.save_showlist(self.pp_profile_dir)
         self.refresh_shows_display()
 
+    def view_show_backup(self,widget):
+        if  self.current_showlist is not None and self.current_showlist.show_is_selected():
+            vbs=ViewBackup()
+            vbs.show(self)
+            vbs.view_show_backup(self.pp_profile_dir,self.current_showlist.selected_show())
+            # no medialist in start show
+            if 'medialist' in self.current_showlist.selected_show():
+                medialist=self.current_showlist.selected_show()['medialist']
+                vbs.view_tracks_backup(self.pp_profile_dir,medialist)
 
-
+                        
     # ***************************************
     #   Medialists
     # ***************************************

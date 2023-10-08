@@ -182,7 +182,13 @@ You will now need to make the following manual modifications:
       
       * Videoplayout uses a new method compatible with MPV. See manual an pp_videoplayout_1p5 example
       
+To help with replacing the removed tracks there are two features:
 
+      * In the Editor, profile>validate will display errors for any track references that are to the removed tracks. 
+      
+      * In the Editor, show>view backup will show the parameters for the show and of all tracks in the associated medialist. This allows identification of removed anonymous tracks. The backup was made wwhen the profile issue was last updated.
+      
+      * The format of the backup parameters display allows cut and paste of field content, particulary multi-line fields. The data is taken from /pp_home/pp_profiles.bak and uses the internal names for the fields, these are close to the names displayed by the editor except 'controls' which sometimes is displayed as 'links'
 
 
 Bug Reports and Feature Requests
