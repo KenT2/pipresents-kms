@@ -1,9 +1,8 @@
 PI PRESENTS  - Version 1.5.3 (KMS)
 ==================================
 
-There are two current versions of Pi Presents. ‘Gapless’ is the current stable version which is not being developed except for bug fixes. 'KMS' is currently in a public Beta Test phase and soon will become the stable version. It works on RPi OS Bullseye and has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
+ 'KMS' is the only fully supported version of Pi Presents. It is currently in a public Beta Test phase and is proving reliable. It works on Legacy RPi OS Bullseye and has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
 
-'Beep' was an unsuccesful version of Pi Presents in which an attempt was made to replace omxplayer with VLC. While VLC worked with Buster it proved impossible to embed its display into Pi Presents under the new DRM/KMS display system that was introduced in Bullseye.
 
 TO INSTALL PIPRESENTS-KMS
 -------------------------
@@ -54,7 +53,7 @@ Requirements
 Install RPi OS Bullseye
 -----------------------
 
-Image a SD Card with RPi OS Bullseye with desktop (32 Bit)
+Image a SD Card with the Legacy RPi OS Bullseye with desktop (32 Bit) accessed from the Raspberry Pi OS (other) menu item on RPi Imager.
 
 Ensure the OS is up to date:
 
