@@ -59,7 +59,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.3"
-        self.pipresents_minorissue = '1.5.3c'
+        self.pipresents_minorissue = '1.5.3d'
 
         StopWatch.global_enable=False
         
@@ -115,7 +115,7 @@ class PiPresents(object):
                             ]
         
 
-        # Monitor.classes=['PiPresents','MediaShow','GapShow','Show','Player']
+        # Monitor.classes=['MediaShow','GapShow','Show']
         # Monitor.classes=['OSCDriver']
         
         # get global log level from command line
@@ -128,11 +128,15 @@ class PiPresents(object):
         # self.mon.log (self," OS and separator:" + os.name +'  ' + os.sep)
         self.mon.log(self,"sys.path[0] -  location of code: "+sys.path[0])
 
-        # log versions of Raspbian and omxplayer, and GPU Memory
-        with open("/boot/issue.txt") as ifile:
-            self.mon.log(self,'\nRaspbian: '+ifile.read())
-
-        
+        # log version of RPi OS
+        if os.path.exists("/boot/issue.txt"):
+            ifile=open("/boot/issue.txt")
+            self.mon.log(self,'\nRaspberry Pi OS: '+ifile.read())
+        else:
+            ifile=open("/boot/firmware/issue.txt")
+            self.mon.log(self,'\nRaspbian: '+ifile.read()) 
+                       
+        # log GPU memory
         self.mon.log(self,'\nGPU Memory: '+ check_output(["vcgencmd", "get_mem", "gpu"],universal_newlines=True))
 
         if os.geteuid() == 0:

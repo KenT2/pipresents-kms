@@ -18,7 +18,9 @@ class Animate(object):
     param_values = 2    # off , on
     time = 3        # time since the epoch in seconds
     tag = 4   # tag used to delete all matching events, usually a track reference.
-    event_template=['','','',0,None]
+    set_time=5
+    delay=6
+    event_template=['','','',0,None,0,0]
     
 # CLASS VARIABLES (Animate.)
     events=[]
@@ -40,8 +42,9 @@ class Animate(object):
         self.event_callback=event_callback
 
         # Initialise time used by sequencer
-        Animate.sequencer_time=int(time.time())
-        
+        Animate.origin_time=time.time()
+        Animate.sequencer_time=0
+        self.mon.log(self,'Init actual time'+'   '+str(Animate.origin_time))        
         # init timer
         self.sequencer_tick_timer=None
 
@@ -58,34 +61,28 @@ class Animate(object):
 
     # called by main program only         
     def poll(self):
-        poll_time=int(time.time())
-        # is current time greater than last time the scheduler was run (previous second or more)
-        # run in a loop to catch up because root.after can get behind when images are being rendered etc.
-        while Animate.sequencer_time<=poll_time:
-            # kick off output pin sequencer
-            self.do_sequencer()
-            Animate.sequencer_time +=1
         
-        # and loop the polling
+        poll_time=time.time()
+        Animate.sequencer_time=poll_time-Animate.origin_time
+        self.do_sequencer()
         self.sequencer_tick_timer=self.widget.after(self.sequencer_tick,self.poll)
-
 
     # execute events at the appropriate time and remove from list (runs from main program only)
     # runs through list a number of times because of problems with pop messing up list
     def do_sequencer(self):
-        # print 'sequencer run for: ' + str(sequencer_time) + ' at ' + str(long(time.time()))
         while True:
             event_found=False
             for index, item in enumerate(Animate.events):
-                if item[Animate.time]<=Animate.sequencer_time:
+                if Animate.sequencer_time>=item[Animate.time]:
+                    #self.mon.log(self,'do event required at '+'%.2f' % (item[Animate.delay]+item[Animate.set_time])+' at actual time '+'%.2f' % (Animate.sequencer_time))
                     event=Animate.events.pop(index)
                     event_found=True
+                    self.mon.log(self, 'send event '+ event[Animate.name] + ' ' +event[Animate.param_type] + ' ' + ' '.join(event[Animate.param_values])+' required at '+'%.2f' % (item[Animate.delay]+item[Animate.set_time])+' sent at '+'%.2f' % (Animate.sequencer_time))
                     self.send_event(event[Animate.name],event[Animate.param_type],event[Animate.param_values],item[Animate.time])
                     break
             if event_found is False: break
 
     def send_event(self,name,param_type,param_values,req_time):
-        self.mon.log(self, 'send event '+ name + ' ' + param_type + ' ' + ' '.join(param_values))
         self.event_callback(name,param_type,param_values,req_time)
 
 
@@ -98,6 +95,7 @@ class Animate(object):
     def animate(self,text,tag):
         lines = text.split("\n")
         for line in lines:
+            #print(line)
             reason,message,delay,name,param_type,param_values=self.parse_animate_fields(line)
             if reason == 'error':
                 return 'error',message
@@ -107,19 +105,22 @@ class Animate(object):
 
 
     def add_event(self,name,param_type,param_values,delay,tag):
-        poll_time=int(time.time())
+        #time at start of track
+        set_time=Animate.sequencer_time
         # prepare the event
         event=Animate.event_template
+        event[Animate.set_time]=set_time
+        event[Animate.delay]=delay
         event[Animate.name]=name
         event[Animate.param_type]=param_type
         event[Animate.param_values]=param_values
-        event[Animate.time]=delay+poll_time   #+1?
+        abs_time=delay+set_time
+        event[Animate.time]=abs_time
         event[Animate.tag]=tag
-        # print '\nadd event ',event
+        #print ('\nadd event ',event)
         # find the place in the events list and insert
         # first item in the list is earliest, if two have the same time then last to be added is fired last.
         # events are fired from top of list
-        abs_time=poll_time+delay
         # print 'new event',abs_time
         copy_event= copy.deepcopy(event)
         length=len(Animate.events)
@@ -148,6 +149,7 @@ class Animate(object):
                     return copy_event
                 index -=1
             # print 'error at start of list',abs_time
+        #self.print_events()
 
 
     def print_events(self):
@@ -190,10 +192,19 @@ class Animate(object):
 
         delay_text=fields[0]
         # check each field
+        try:
+            delay=float(delay_text)
+        except:
+            return 'error','Delay is not a number : '+ line,'','',[],0
+        if delay< 0:
+            return 'error','Delay is negative : '+ line,'','',[],0
+
+        """
         if  not delay_text.isdigit():
             return 'error','Delay is not an integer in : '+ line,'','',[],0
         else:
             delay=int(delay_text)
+        """
             
         name=fields[1]
 

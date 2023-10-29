@@ -1219,8 +1219,13 @@ class Validator(AdaptableDialog):
             return
 
         delay_text=fields[0]
-        if  not delay_text.isdigit(): self.display('f','Delay is not 0 or a positive integer in:' + field + ", " + line)
-
+        try:
+            delay=float(delay_text)
+        except:
+             self.display('f','Delay is not a number in: ' + field + ", " + line)
+             return
+        if delay< 0:
+            self.display('f','Delay is negative in: ' + field + ", " + line)
         return
     
 

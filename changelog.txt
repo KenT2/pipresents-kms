@@ -1,3 +1,10 @@
+CHANGES FOR 1.5.3d  28/10/2023
+===================================
+fixed - crash when show timeout is used in a mediashow
+fixed - crash as issue.txt is moved to /boot/firmware in bookworm
+enhanced - animate timing has finer resolution
+
+
 CHANGES FOR 1.5.3c  8/10/2023
 ===================================
 enhanced - Editor now has show>view backup menu item whichdisplays the paramters of the backup made when the profile issue was last updated.

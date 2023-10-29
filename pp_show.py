@@ -56,6 +56,7 @@ class Show(object):
         self.pp_home=pp_home
         self.pp_profile=pp_profile
         self.command_callback=command_callback
+        self.admin_messages=[]
 
         # init things that will then be reinitialised by derived classes
         self.medialist=None
@@ -358,25 +359,28 @@ class Show(object):
     # used by end_shower to get the last track of the subshow
     def base_end_shower(self):
         self.mon.trace(self,' -  returned back to level: ' +str(self.level))
-        # get the previous subshow and last track it played
-        self.previous_shower,self.current_player=self.shower.base_subshow_ended_callback()
-        if self.leak is True:
-            print('IN ',self.show_params['title'])
-            print('got from self.shower.base_subshow_ended_callback',self.previous_shower.show_params['title'], end=' ')
-            if self.current_player !=None:
-                print(self.current_player.track_params['title'])
-            else:
-                print(' None')
-        if self.previous_shower!= None:
-            self.subshow_kickback_signal=self.shower.subshow_kickback_signal
-            # print 'get subshow kickback from subshow',self.subshow_kickback_signal
-            self.previous_shower.base_withdraw_show_background()
-            self.base_show_show_background()
-        self.mon.trace(self,'- get previous_player from subshow: ' + self.mon.pretty_inst(self.current_player))
-        if self.shower != None:
+        #krt workaround for xad bug
+        #if True:
+        if self.shower!=None:
+            # get the previous subshow and last track it played
+            self.previous_shower,self.current_player=self.shower.base_subshow_ended_callback()
             if self.leak is True:
-                print('shower = None',self.shower.show_params['title'])
-            self.shower=None
+                print('IN ',self.show_params['title'])
+                print('got from self.shower.base_subshow_ended_callback',self.previous_shower.show_params['title'], end=' ')
+                if self.current_player !=None:
+                    print(self.current_player.track_params['title'])
+                else:
+                    print(' None')
+            if self.previous_shower!= None:
+                self.subshow_kickback_signal=self.shower.subshow_kickback_signal
+                # print 'get subshow kickback from subshow',self.subshow_kickback_signal
+                self.previous_shower.base_withdraw_show_background()
+                self.base_show_show_background()
+            self.mon.trace(self,'- get previous_player from subshow: ' + self.mon.pretty_inst(self.current_player))
+            if self.shower != None:
+                if self.leak is True:
+                    print('shower = None',self.shower.show_params['title'])
+                self.shower=None
 
 
     # close or unload the current player when ending the show
@@ -832,6 +836,8 @@ class Show(object):
     def delete_admin_message(self):
         if self.admin_message is not None:
             self.canvas.delete(self.admin_message)
+            self.admin_message=None
+            #print ('admin message after deleteion',self.admin_message)
             self.canvas.update_idletasks( )
 
 
