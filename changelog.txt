@@ -1,3 +1,9 @@
+CHANGES FOR 1.5.3e  4/12/2023
+===================================
+enhanced - added pp_gpiozerodriver.py I/O plugin for use on Pi5
+enhanced - updated pp_audio.cfg for Pi5
+
+
 CHANGES FOR 1.5.3d  28/10/2023
 ===================================
 fixed - crash when show timeout is used in a mediashow

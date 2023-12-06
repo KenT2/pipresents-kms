@@ -122,7 +122,8 @@ class MPVPlayer(Player):
         
         #VIDEO
         self.add_option('vo','gpu')
-        
+        #self.add_option('hwdec','drm-copy')
+        #self.add_option('hwdec','v412m2m-copy')
         # DISPLAY
         video_display_name = self.show_canvas_display_name
         # Is it valid and connected

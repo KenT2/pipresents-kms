@@ -59,7 +59,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.3"
-        self.pipresents_minorissue = '1.5.3d'
+        self.pipresents_minorissue = '1.5.3e'
 
         StopWatch.global_enable=False
         
@@ -111,8 +111,8 @@ class PiPresents(object):
                             'PathManager','ControlsManager','ShowManager','TrackPluginManager','IOPluginManager',
                             'MplayerDriver','MPVPlayer','MPVDriver',
                             'TimeOfDay','ScreenDriver','Animate','OSCDriver','CounterManager',
-                            'Network','Mailer'
-                            ]
+                            'Network','Mailer',
+                            'pp_gpiozerodriver']
         
 
         # Monitor.classes=['MediaShow','GapShow','Show']
@@ -132,9 +132,11 @@ class PiPresents(object):
         if os.path.exists("/boot/issue.txt"):
             ifile=open("/boot/issue.txt")
             self.mon.log(self,'\nRaspberry Pi OS: '+ifile.read())
+        elif os.path.exists("/boot/firmware/issue.txt"):
+                ifile=open("/boot/firmware/issue.txt")
+                self.mon.log(self,'\nRaspberry Pi OS: '+ifile.read())
         else:
-            ifile=open("/boot/firmware/issue.txt")
-            self.mon.log(self,'\nRaspbian: '+ifile.read()) 
+            pass
                        
         # log GPU memory
         self.mon.log(self,'\nGPU Memory: '+ check_output(["vcgencmd", "get_mem", "gpu"],universal_newlines=True))
