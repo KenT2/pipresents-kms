@@ -1,7 +1,9 @@
 PI PRESENTS  - Version 1.5.3 (KMS)
 ==================================
 
- 'KMS' is the only fully supported version of Pi Presents. It is currently in a public Beta Test phase and is proving reliable. It works on Legacy RPi OS Bullseye and has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
+ 'KMS' is the the current stable version of Pi Presents. However it requires the Legacy RPi OS Bullseye which is likely to be end of life in October 2025 and it is not compatible with the RPi Model 5. A newer version, pipresents-gtk, which is in Beta Test, will work on the preferred RPi OS Bookworm and RPi Model 5
+ 
+ KMS has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
 
 
 TO INSTALL PIPRESENTS-KMS
