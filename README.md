@@ -1,6 +1,9 @@
 PI PRESENTS  - Version 1.5.3 (KMS)
 ==================================
 
+Diese Readme-Datei hat Peter Vasen ins Deutsche übersetzt. Klicken Sie hier 
+http://www.web-echo.de/4.html
+
 'KMS' is the the current stable version of Pi Presents. It is compatible with the legacy RPi OS Bullseye and hence is limited to Pi4 or earlier models.
 
 It can be used on RPI OS Bookworm provided that the X11 Desktop Environment is used. However the mpv based video player crashes.
