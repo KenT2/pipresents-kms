@@ -1,10 +1,11 @@
 PI PRESENTS  - Version 1.5.3 (KMS)
 ==================================
 
- 'KMS' is the the current stable version of Pi Presents. However it requires the Legacy RPi OS Bullseye which is likely to be end of life in October 2025 and it is not compatible with the RPi Model 5. A newer version, pipresents-gtk, which is in Beta Test, will work on the preferred RPi OS Bookworm and RPi Model 5
- 
- KMS has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
+'KMS' is the the current stable version of Pi Presents. It is compatible with the legacy RPi OS Bullseye and hence is limited to Pi4 or earlier models.
 
+It can be used on RPI OS Bookworm provided that the X11 Desktop Environment is used. However the mpv based video player crashes.
+
+ KMS has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
 
 TO INSTALL PIPRESENTS-KMS
 -------------------------
@@ -46,41 +47,34 @@ The full manual in English is here https://github.com/KenT2/pipresents-kms/blob/
 Requirements
 -------------
 
-	* must use the latest version of RPi OS Bullseye with Desktop (not the Lite version)
-	* must be run from the PIXEL desktop.
-	* can be installed and run from any user that is created with RPi OS utilities
-	* must have Python 3 installed (which RPi OS does)
-	* should use a clean install of RPi OS, particularly if you intend to use GPIO
+	* Must use:
+	* The latest version of the legacy 32 bit RPi OS Bullseye with Desktop (not the Lite version)
+	* Must be run from the PIXEL desktop.
+	* Can be installed and run from any user that is created with RPi OS utilities
+	* Must have Python 3 installed (which RPi OS does)
+	* Should use a clean install of RPi OS, particularly if you intend to use GPIO
 
 Install RPi OS Bullseye
 -----------------------
 
-Image a SD Card with the Legacy RPi OS Bullseye with desktop (32 Bit) accessed from the Raspberry Pi OS (other) menu item on RPi Imager.
+Image a SD Card with the legacy RPi OS Bullseye with desktop (32 Bit)
 
 Ensure the OS is up to date:
 
          sudo apt update
          sudo apt full-upgrade
-	 
 
-Install required packages 
+
+Install packages 
 -----------------------------
          sudo apt install python3-pil.imagetk
          sudo apt install unclutter
          sudo apt install mplayer
-         
-         sudo pip3 install selenium
          sudo apt install chromium-chromedriver
-
+         sudo apt install python3-selenium
          sudo apt install mpv
          sudo apt install python3-mpv
-         python3 -m pip install DRV2605
-
-
-Install optional packages
-------------------------------
-         sudo pip3 install evdev  (if you are using the input device I/O plugin)
-         sudo apt install mpg123 (for .mp3 beeps)
+         sudo apt install mpg123 (optonal for .mp3 beeps)
 
 
 
@@ -146,7 +140,7 @@ If you have modified it, make the edits to  /pipresents/pp_config/pp_web.cfg fil
 
 Copy any other files you have changed in /pipresents/pp_config/ - pp_email.cfg, pp_oscmonitor.cfg, pp_oscremote.cfg
 
-This version requires the legacy camera library. If using the camera run sudo raspi-config and select legacy camera.
+This version requires the legacy camera library. If using the camera use Bulllseye and run sudo raspi-config and select legacy camera.
       
 
 For upgrade from Beep:

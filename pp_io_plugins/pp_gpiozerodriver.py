@@ -144,8 +144,10 @@ class pp_gpiozerodriver(object):
             return 'error',message                        
         if val=='high': 
             pin['active-high']=True
+            return 'normal',''
         elif val=='low': 
             pin['active-high']=False
+            return 'normal',''
         else:
             return 'error', pin_def+' active-high must be high or low'
 
@@ -279,7 +281,7 @@ class pp_gpiozerodriver(object):
                     pin['pin-object']=pin_object
 
 
-        self.print_pins()
+        #self.print_pins()
         
     def print_pins(self):
         for pin in pp_gpiozerodriver.pins:
@@ -301,7 +303,7 @@ class pp_gpiozerodriver(object):
             
     #callbacks
     def when_pressed(self,pin):
-        print ('pressed',pin.pin,pin.is_pressed,pin.is_held)
+        #print ('pressed',pin.pin,pin.is_pressed,pin.is_held)
         pin_index=self.find_input_pin(pin.pin)
         if pin_index['linked-output']!='':
             linked_pin=self.find_output_pin('board-name',pin_index['linked-output'])
@@ -362,17 +364,28 @@ class pp_gpiozerodriver(object):
         
         #gpio only handles state or blink parameters, ignore otherwise
         if param_type == 'state':
-            self.do_state(pin,param_values)
+            status,message=self.do_state(pin,param_values)
+            return status,message
+            #return 'normal',pp_gpiozerodriver.title + ' handle: ' + param_type + ' '+param_values[0]
         elif param_type=='blink':
-            self.do_blink(pin,param_values)
+            status,message=self.do_blink(pin,param_values)
+            return status,message
+            #return 'normal',pp_gpiozerodriver.title + ' handle: ' + param_type + str(param_values)
         else:
             #print ('no match',param_type)
             return 'normal',pp_gpiozerodriver.title + ' does not handle: ' + param_type
         
     def do_blink(self,pin,param_values):
-        on_time=param_values[0]
-        off_time=param_values[1]
-        n= param_values[2]
+        if not self.is_float(param_values[0]):
+            return 'error', 'On Time must be a positive number: '+param_values[0]
+        on_time=float(param_values[0])
+        if not self.is_float(param_values[1]):
+            return 'error', 'Off Time must be a positive number: '+param_values[1]
+        off_time=float(param_values[1])
+        if param_values[2] == '0':
+            n=None
+        else:
+            n= int(param_values[2])
         #print(pp_gpiozerodriver.title + ' pin '+ pin['board-name']+ ' blink '+str(param_values))
         pin['pin-object'].blink(on_time=on_time,off_time=off_time,n=n,background=True)
         return 'normal',pp_gpiozerodriver.title + ' pin P1-'+ pin['board-name']+ ' blink '+str(param_values)
@@ -391,6 +404,13 @@ class pp_gpiozerodriver(object):
         pin['pin-object'].value=state
         return 'normal',pp_gpiozerodriver.title + ' pin P1-'+ pin['board-name']+ ' set  '+ str(state)
 
+    def is_float(self,test_string):
+        try : 
+            float(test_string) 
+            return True
+        except : 
+            print("Not a float") 
+            return False
 
     def reset_outputs(self):
         if pp_gpiozerodriver.driver_active is True:

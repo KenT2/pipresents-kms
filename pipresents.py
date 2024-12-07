@@ -39,7 +39,6 @@ from pp_network import Mailer, Network
 from pp_iopluginmanager import IOPluginManager
 from pp_countermanager import CounterManager
 from pp_beepplayer import BeepPlayer
-from pp_vibeplayer import VibePlayer
 from pp_audiomanager import AudioManager
 from pp_vlcdriver import Logger
 
@@ -59,7 +58,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.3"
-        self.pipresents_minorissue = '1.5.3e'
+        self.pipresents_minorissue = '1.5.3f'
 
         StopWatch.global_enable=False
         
@@ -380,7 +379,8 @@ class PiPresents(object):
                 self.end('error',"I2C interface must be enabled for Vibes")
             else:
                 #init vibe player
-                #print ('pp _init vibeplayer')
+                from pp_vibeplayer import VibePlayer
+                print ('pp _init vibeplayer')
                 self.vp=VibePlayer()
              
         # initialise the I/O plugins by importing their drivers

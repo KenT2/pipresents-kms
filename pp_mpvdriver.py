@@ -214,8 +214,9 @@ class MPVDriver(object):
                 self.state='show-niceday'
                 self.frozen_at_end=False
                 self.player.video=False
-                self.video_frame.destroy()
                 self.player.stop()
+                #self.player.terminate()
+                #self.video_frame.destroy()
                 return
                 
         else:

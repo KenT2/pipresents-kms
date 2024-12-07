@@ -1,3 +1,11 @@
+CHANGES FOR 1.5.3f  26/5/2024
+===================================
+enhanced - added --backlight command line option so touchscreen backlight control is optional and rpi-backlight does not need to be installed
+fixed - --vibes command line option now works as intended so that i2c devices does not have to be installed
+modified - replaced pip versions of modules to be installed with apt versions
+modified - examples now use gpiozero.cfg insted of gpio.cfg
+fixed - crash in mpv player with freeze at end = no
+
 CHANGES FOR 1.5.3e  4/12/2023
 ===================================
 enhanced - added pp_gpiozerodriver.py I/O plugin for use on Pi5

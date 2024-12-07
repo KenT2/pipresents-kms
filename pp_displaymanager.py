@@ -151,9 +151,10 @@ class DisplayManager(object):
         # Have now got all the required information
 
         # setup backlight for touchscreen if connected
-        status,message=self.init_backlight()
-        if status=='error':
-            return status,message,None
+        if options['backlight'] == True:
+            status,message=self.init_backlight()
+            if status=='error':
+                return status,message,None
                     
         # set up Tkinter windows
         status,message,root=self.init_tk(options,close_callback)
