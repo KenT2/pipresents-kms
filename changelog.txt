@@ -1,3 +1,9 @@
+
+CHANGES FOR 1.5.3g  19/10/2025
+===================================
+fixed - added A/V to pp_definitions.py for shows
+modified - modified instructions for imaging RPi OS to cope with release of RPi OS Trixie
+
 CHANGES FOR 1.5.3f  26/5/2024
 ===================================
 enhanced - added --backlight command line option so touchscreen backlight control is optional and rpi-backlight does not need to be installed

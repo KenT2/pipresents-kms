@@ -6,8 +6,6 @@ http://www.web-echo.de/4.html
 
 'KMS' is the the current stable version of Pi Presents. It is compatible with the legacy RPi OS Bullseye and hence is limited to Pi4 or earlier models.
 
-It can be used on RPI OS Bookworm provided that the X11 Desktop Environment is used. However the mpv based video player crashes.
-
  KMS has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
 
 TO INSTALL PIPRESENTS-KMS
@@ -60,7 +58,21 @@ Requirements
 Install RPi OS Bullseye
 -----------------------
 
-Image a SD Card with the legacy RPi OS Bullseye with desktop (32 Bit)
+Using RPi Imager image a SD Card with RPi OS Bullseye with desktop (32 Bit)
+
+Pi Towers has released a new version of RPi OS based on Debian Trixie. This means that RPi Imager does not include RPi OS Bullseye which is the version required by PP-KMS. However it is possible to obtain it from the Raspberry Pi Archive using these instructions:
+
+Using a browser go to
+
+    https://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2023-05-03/
+
+and download the file 
+
+    2023-05-03-raspios-bullseye-armhf.img.xz
+
+You can check the correctness of the download using one of the check files in the directory.
+
+When using RPi Imager select 'Use custom' and select the downloaded img.xz file.
 
 Ensure the OS is up to date:
 

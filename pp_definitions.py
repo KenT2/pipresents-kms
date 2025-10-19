@@ -444,7 +444,7 @@ class PPdefinitions(object):
                     
                                        
                     'mpv-audio':{'shape':'option-menu','text':'MPV Player Audio','must':'no','read-only':'no',
-                                       'values':['hdmi','hdmi0','hdmi1','USB','bluetooth','USB2','']},
+                                       'values':['hdmi','hdmi0','hdmi1','A/V','USB','bluetooth','USB2','']},
                     'mpv-other-options':{'shape':'entry','text':'MPV Player Options','must':'no','read-only':'no'},
                     'mpv-volume':{'shape':'entry','text':'MPV Player Volume','must':'no','read-only':'no'},
                     'mpv-window':{'shape':'entry','text':'MPV Window','must':'no','read-only':'no'},
