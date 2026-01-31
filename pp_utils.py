@@ -6,12 +6,26 @@ import datetime
 import sys
 import os
 import gc
+import csv
+import pathlib
+from pprint import pprint
 import tkinter.messagebox
 from tkinter import NW,N,W,CENTER,LEFT,RIGHT
 from pp_statsrecorder import Statsrecorder
 # from pympler.tracker import SummaryTracker
 # from pympler import summary, muppy
 # import types
+
+
+def os_info(file):
+    path = pathlib.Path(file)
+    with open(path) as stream:
+        reader = csv.reader(stream, delimiter="=")
+        os_release = dict(reader)
+
+    #pprint(os_release)
+    return os_release
+
 
 def calculate_text_position(x_text,y_text,x1,y1,centre_x,centre_y,width,height,justify_text):
     if x_text == '':
@@ -334,4 +348,7 @@ class Monitor(object):
 
 ##    def id(self,caller):
 ##        return self.pretty_inst(caller)
-
+if __name__ == '__main__':
+    info=os_info('/etc/os-release')
+    print(info['VERSION_CODENAME'])
+    print(info['PRETTY_NAME'])

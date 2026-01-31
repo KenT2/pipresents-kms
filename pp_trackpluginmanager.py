@@ -1,5 +1,5 @@
 import os
-import imp
+from importlib.util import spec_from_file_location, module_from_spec
 import configparser
 from pp_utils import Monitor
 
@@ -104,14 +104,13 @@ class TrackPluginManager(object):
 # **********************************
 
     def load_plugin_file(self, name, plugin_dir):
-        fp, pathname,description = imp.find_module(name,[plugin_dir])
-        module_id =  imp.load_module(name,fp,pathname,description)
-        plugin_class=getattr(module_id,name)
+        spec = spec_from_file_location(name, plugin_dir+'/'+name+'.py')
+        module_obj = module_from_spec(spec)
+        spec.loader.exec_module(module_obj)
+        plugin_class = getattr(module_obj,name)
         self.plugin=plugin_class(self.root,self.canvas,
                                  self.plugin_params,self.track_params,self.show_params,
-                                 self.pp_dir,self.pp_home,self.pp_profile)
-
-
+                                 self.pp_dir,self.pp_home,self.pp_profile)   
 
 
 

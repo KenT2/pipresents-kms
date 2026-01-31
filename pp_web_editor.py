@@ -40,7 +40,6 @@ class PPWebEditor(App):
         self.editor_issue="1.5.3"
         self.force_update= False
         self.log=False
-        
         # get directory holding the code
         self.editor_dir=sys.path[0]
 
@@ -1469,14 +1468,9 @@ class Options(AdaptableDialog):
     def create_options(self):
         config=configparser.ConfigParser(inline_comment_prefixes = (';',))
         config.add_section('config')
-        if os.name == 'nt':
-            config.set('config','home',os.path.expanduser('~')+'\pp_home')
-            config.set('config','media',os.path.expanduser('~'))
-            config.set('config','offset','')
-        else:
-            config.set('config','home',os.path.expanduser('~')+'/pp_home')
-            config.set('config','media',os.path.expanduser('~')+'/pp_home')
-            config.set('config','offset','')
+        config.set('config','home',os.path.expanduser('~')+'/pp_home')
+        config.set('config','media',os.path.expanduser('~')+'/pp_home')
+        config.set('config','offset','')
         with open(self.options_file, 'w') as config_file:
             config.write(config_file)
 

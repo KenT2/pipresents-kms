@@ -1,6 +1,12 @@
+Version 1.5.3h  25/1/2026
+========================
+Pi Presents requires pulseaudio-utils to be installed (see Readme.md)
+Pi Presents must use the X11 Display Manager (see Readme.md)
+Pi Present uses the latest version of RPi OS (Trixie) (See Readme.md)
+
 Version 1.5.3b  19/9/2023
 ========================
-MPV video tracks do not allow display on a monitor other than the one used for the Show. Example pp_traccckplugin_1p5 and manual have been modified.
+MPV video tracks do not allow display on a monitor other than the one used for the Show. Example pp_trackplugin_1p5 and manual have been modified.
 
 Version 1.5.3a
 ==============

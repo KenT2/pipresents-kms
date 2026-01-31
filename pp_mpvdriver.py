@@ -2,9 +2,7 @@
 pp_mpvdriver.py
 
 API for mpv which allows mpv to be controlled by the python-mpv library
-
-
-python bindings for mpv are here https://github.com/jaseg/python-mpv, sudo pip3 install mpv
+python bindings for mpv are here https://github.com/jaseg/python-mpv, sudo apt install python3-mpv
 
 USE
 
@@ -43,14 +41,17 @@ mute()unmute - mute without changing volume
 
 import time
 import sys,os
-import mpv #sudo pip3 install mpv
+from python_mpv_jsonipc import MPV
 import tkinter as tk
 from pp_utils import Monitor
+import objgraph
+import gc
 
 class MPVDriver(object):
     
     # used first time and for every other instance
     def __init__(self,root,canvas,freeze_at_start,freeze_at_end,background_colour):
+        #print ('\nINIT')
         self.mon=Monitor()
         self.mon.log (self,'start mpvdriver')
         self.root=root
@@ -72,43 +73,50 @@ class MPVDriver(object):
 
 
     def load(self,track,options,x,y,width,height):
+        #print ('driver load',track)
+        # for showing uncollectable garbage
+        # objgraph.show_growth(limit=1)        
         self.width=width
         self.height=height
+        self.track=track
+        self.options=options
         
         self.state='load-loading'
         self.load_position=-1
         self.load_complete_signal=False
-        self.video_frame = tk.Frame(self.canvas,height=0,width=0,bg='')
+        #self.video_frame=tk.Frame(height=self.height,width=self.width,bg=self.background_colour)
+        self.video_frame=tk.Frame(height=0,width=0,bg=self.background_colour)
         self.video_frame.place(x=x,y=y)
-        
-        #self.video_window=self.canvas.create_window(x,y,width=width,height=height)
-        
-        self.player = mpv.MPV(wid=str(int(self.video_frame.winfo_id())))
-        #self.player.video=False      #was False
-        status,message=self.apply_options(options)
+        self.root.update_idletasks()
+        self.player=MPV(input_default_bindings='no', input_vo_keyboard ='no',osc='no',
+                                     profile='fast',config='no',
+                                     wid=str(int(self.video_frame.winfo_id()))
+                                     )
+
+        status,message=self.apply_options(self.options)
         if status == 'error':
             print(message)
 
-        self.player.play(track)
-        self.player.observe_property('time-pos', self.load_property_change)
+        self.player.play(self.track)
         self.player.volume=0        
         #need a timeout as sometimes a load will fail 
         self.load_timeout= 200
         
         self.load_status_timer=self.root.after(1,self.load_status_loop)
         
-
-    def load_property_change(self,name,value):
-        if name=='time-pos' and value is not None and value>=0:
-            self.player.pause=True
-            self.player.unobserve_property('time-pos',self.load_property_change)
-            #print ('load complete at time-pos',value)
-            self.load_complete_signal=True
-            self.load_position=value
-            return
+    def apply_options(self,options):
+        for option in options:
+            #print (option[0],option[1])
+            try:
+                setattr(self.player,option[0],option[1])
+            except:
+                print ('ERROR bad mpv option',option[0],option[1])
+                #return 'error','bad MPV option: ' + option[0] +' '+ option[1]
+        return 'normal',''
 
 
     def load_status_loop(self):
+        #print(self.player.time_pos)
 
         if self.quit_load_signal is True:
             self.quit_load_signal=False
@@ -117,20 +125,26 @@ class MPVDriver(object):
             self.mon.log (self,'unloaded at: '+str(self.load_position))
             return
             
-        if self.load_complete_signal is True:
-            self.load_complete_signal=False
+        if self.load_complete() is True:
+            #print ('load complete')
             self.duration=self.player.duration
-            self.frozen_at_start=True
-            
+
             if self.freeze_at_start in ('before-first-frame','after-first-frame'):
-                self.mon.log (self,'stop-frozen at: ' + str(self.load_position))
+                self.mon.log (self,'load-frozen at: ' + str(self.load_position))
+                self.frozen_at_start=True
+                if self.freeze_at_start=='after-first-frame':
+                    pass
+                    self.video_frame.config(height=self.height,width=self.width,bg=self.background_colour)
+                    self.root.update_idletasks()
                 self.state='load-frozen'
+                
             else:
                 self.state='load-ok'
+                #print ('load OK')
+                self.video_frame.config(height=self.height,width=self.width,bg=self.background_colour)
+                self.root.update_idletasks()                
                 self.mon.log (self,'load-ok at: '+str(self.load_position))
                 
-            if self.freeze_at_start=='after-first-frame':
-                self.video_frame.config(height=self.height,width=self.width,bg=self.background_colour)
             return
             
         self.load_timeout-=1
@@ -141,52 +155,55 @@ class MPVDriver(object):
 
         self.load_status_timer=self.root.after(10,self.load_status_loop)
 
-    def apply_options(self,options):
-        #print ('OPTIONS')
-        for option in options:
-            #print (option[0],option[1])
-            try:
-                self.player[option[0]]=option[1]
-            except:
-                return 'error','bad MPV option: ' + option[0] +' '+ option[1]
-        return 'normal',''
+
+    def load_complete(self):
+        value=self.player.time_pos
+        #print ('load',value)
+        if value is not None and value>=0:
+            self.player.pause=True
+            self.load_complete_signal=True
+            self.load_position=value
+            return True
+        return False
+
 
     def show(self,initial_volume):
+        #print ('driver showing',self.track)
         if self.freeze_at_start == 'no':
             self.state='show-showing'
             self.video_frame.config(height=self.height,width=self.width,bg=self.background_colour)
-            self.player.pause=False
             self.set_volume(initial_volume)
+            self.canvas.update_idletasks()
             self.mon.log (self,'no freeze at start, start showing')
-            self.show_complete_signal=False
-            self.player.observe_property('time-pos',self.show_complete_change)
             self.frozen_at_start=False
-            # print ('duration',self.duration)
-            self.show_status_timer=self.root.after(1,self.show_status_loop)
+            self.player.pause=False
+            #print('going to loop')
+            self.show_status_timer=self.root.after(10,self.show_status_loop)
         return
 
 
-    def show_complete_change(self,name,value):
-        #print (self.freeze_at_end,name,value,self.duration)
+    def show_complete(self):
+        value=self.player.time_pos
+        #print ('in show complete',self.freeze_at_end,value)
         if self.freeze_at_end =='yes':
-            if name =='time-pos' and value == None:
-                print('mpv video overrun, time-pos is: ',value)
-            # name=='time-pos'and value==None copes with possible overrun
-            if (name=='time-pos'and value==None)or(name=='time-pos' and value>self.duration-0.12):
-                self.show_complete_signal=True
-                self.player.unobserve_property('time-pos',self.show_complete_change)
+            #if name =='time-pos' and value == None:
+                #print('mpv video overrun, time-pos is: ',value)
+            if (value==None)or(value>self.duration-0.12):
                 self.show_position=value
-                #print('CHANGE - paused at end',value)
-                return
+                return True
+            return False
         else:
-            if name =='time-pos' and value==None:
-                #print('CHANGE - nice day',value)
-                self.show_complete_signal=True
+            if value==None:
                 self.show_position=value
-                self.player.unobserve_property('time-pos',self.show_complete_change)
-                return
+                #print('change detected niceday ',value)
+                return True
+            return False
+            #print('missed change',name,value)
+                
  
     def show_status_loop(self):
+        #print ('start of loop')
+        sc=self.show_complete()
         if self.quit_show_signal is True:
             self.quit_show_signal= False
             if self.freeze_at_end == 'yes':
@@ -200,36 +217,37 @@ class MPVDriver(object):
                 self.state='show-niceday'
                 self.mon.log(self,'stop caused no pause '+self.state)
                 return
-                
-        if self.show_complete_signal is True:
-            self.show_complete_signal=False
+        #print ('in loop',sc)        
+        if sc is True:
+            #print ('show complete')
             if self.freeze_at_end == 'yes':
                 self.player.pause=True
                 self.frozen_at_end=True
+                #print ('pause')
                 self.mon.log(self,'paused at end at: '+str(self.show_position))
                 self.state='show-pauseatend'
                 return
             else:
                 self.mon.log(self,'ended with no pause'+str(self.show_position))
+                #print ('niceday')
                 self.state='show-niceday'
                 self.frozen_at_end=False
-                self.player.video=False
-                self.player.stop()
-                #self.player.terminate()
-                #self.video_frame.destroy()
+                #self.player.stop()
                 return
                 
         else:
-            #self.mon.log(self,'after '+self.state)
             self.show_status_timer=self.root.after(30,self.show_status_loop)
 
-            
+    def  hide(self):
+        #print ('driver hide',self.track)
+        pass
+
 
     def close(self):
-        #print ('in close')
-        self.player.video=False
-        self.player.pause=False
-        self.player.stop()
+        #print ('driver close',self.track)
+        #if self.freeze_at_end  =='yes':
+            #self.player.pause=False
+            #self.player.stop()
         self.player.terminate()
         self.video_frame.destroy()
         if self.load_status_timer != None:
@@ -238,7 +256,13 @@ class MPVDriver(object):
         if self.show_status_timer != None:
             self.root.after_cancel(self.show_status_timer)
             self.show_status_timer=None
+            
+        # to show uncollectable garbage
+        #print('Uncollectable Garbage',gc.collect())
+        #objgraph.show_growth()
+        #objgraph.show_backrefs(objgraph.by_type('Canvas'),filename='backrefs.png')
 
+        
 # ***********************
 # Commands
 # ***********************
@@ -251,11 +275,8 @@ class MPVDriver(object):
             self.state='show-showing'
             self.mon.log (self,'freeze off, go ok')
             self.player.pause=False
-            #self.player.video=1
             self.video_frame.config(height=self.height,width=self.width,bg=self.background_colour)
             self.set_volume(initial_volume)
-            self.show_complete_signal=False
-            self.player.observe_property('time-pos',self.show_complete_change)
             self.root.after(1,self.show_status_loop)
             self.frozen_at_start=False
             return 'go-ok'
@@ -343,17 +364,23 @@ class PP(object):
 
         
     def start(self):
-        self.options=[['vo','gpu'],['sid','auto']]
+        # jan25 these options work
+        self.options=[['vo','gpu'],['sid','auto'],['input-default-bindings','no'],
+        ['input-vo-keyboard','no'],['osc','no'],['ao','pulse'],['video-aspect-override','-1']]
+
         self.root,self.canvas,width,height=self.create_gui()
-        print ('C W H', self.canvas,width,height)
         self.width=width-100
         self.height=height-100
+        self.dd1=None
+        self.dd2=None
         self.root.after(1,self.load_first)
         self.root.mainloop()
+
         
     def load_first(self):
-        self.dd1=MPVDriver(self.root,self.canvas,'no','no','green')
-        self.dd1.load('/home/pp/pp_home/media/suits-short.mkv',self.options,100,100,self.width,self.height)
+        # jan25
+        self.dd1=MPVDriver(self.root,self.canvas,'no','no','black')
+        self.dd1.load('/home/pp/pp_home/media/1sec.mp4',self.options,100,100,self.width,self.height)
         self.monitor_load1()
         
     def monitor_load1(self):
@@ -366,8 +393,11 @@ class PP(object):
         
     def show_first(self):
         #print ('ready to show first')
-        self.dd1.show()
+        self.dd1.show(100)
+        if self.dd2 is not None:
+            self.dd2.close()
         self.monitor_show1()
+        
         
     def monitor_show1(self):
         state=self.dd1.get_state()
@@ -380,7 +410,7 @@ class PP(object):
         
     def load_second(self):
         self.dd2=MPVDriver(self.root,self.canvas,'no','yes','white')
-        self.dd2.load('/home/pp/pp_home/media/suits-short.mkv',self.options,100,100,self.width,self.height)
+        self.dd2.load('/home/pp/pp_home/media/1sec.mp4',self.options,9,0,self.width,self.height)
         self.monitor_load2()   
         
         
@@ -395,8 +425,18 @@ class PP(object):
         
     def show_second(self):
         #print ('ready to show second')
-        self.dd2.show()
-        self.dd1.close() 
+        self.dd2.show(100)
+        self.dd1.close()
+        self.monitor_show2()
+        
+        
+    def monitor_show2(self):
+        state=self.dd2.get_state()
+        #print ('show2 state', state)
+        if state in ('show-pauseatend','show-niceday'):
+            self.load_first()
+            return
+        self.root.after(100,self.monitor_show2)  
                 
         
     def close_callback(self,dum=None):
@@ -415,9 +455,9 @@ class PP(object):
 
         # set window dimensions and decorations
         # fullscreen for all displays that are not develop_id
-        window_width=1920
-        # krt changed
-        window_height=1080
+        window_width=400
+        # krt jan25
+        window_height=300
         window_x=0
         window_y=0
         #KRT
@@ -425,7 +465,8 @@ class PP(object):
         
         # print ('Window Position FS', this_id, window_x,window_y,window_width,window_height)
         tk_window.geometry("%dx%d%+d%+d"  % (window_width,window_height,window_x,window_y))
-        tk_window.attributes('-zoomed','1')
+        #jan25
+        tk_window.attributes('-zoomed','0')
   
         # define response to main window closing.
         tk_window.protocol ("WM_DELETE_WINDOW", self.close_callback)
@@ -434,14 +475,14 @@ class PP(object):
         # setup a canvas onto which will be drawn the images or text
         # canvas covers the whole screen whatever the size of the window
 
+        #jan25
+        canvas_height=300
+        canvas_width=400
         
-        canvas_height=1080/2+300
-        canvas_width=1920/2+300
-        
-        tk_canvas = tk.Canvas(tk_window, bg='red')
+        tk_canvas = tk.Canvas(tk_window, bg='black')
         tk_canvas.config(height=canvas_height,
                                  width=canvas_width,
-                                 highlightthickness=2,
+                                 highlightthickness=0,
                                 highlightcolor='yellow')
         tk_canvas.place(x=0,y=0)
 

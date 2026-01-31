@@ -7,6 +7,8 @@ from pp_displaymanager import DisplayManager
 from pp_audiomanager import AudioManager
 import copy
 from pp_utils import Monitor
+#import objgraph
+#import gc
 
 # NO display name
 # no layer
@@ -54,7 +56,7 @@ class MPVPlayer(Player):
                          command_callback)
         # print ' !!!!!!!!!!!videoplayer init'
         self.mon.trace(self,'')
-    
+
         
         # output device
         if self.track_params['mpv-audio'] != "":
@@ -116,14 +118,6 @@ class MPVPlayer(Player):
         
         self.options=[]
         
-        self.add_option('input-default-bindings','no')
-        self.add_option('input-vo-keyboard','no')
-        self.add_option('osc','no')
-        
-        #VIDEO
-        self.add_option('vo','gpu')
-        #self.add_option('hwdec','drm-copy')
-        #self.add_option('hwdec','v412m2m-copy')
         # DISPLAY
         video_display_name = self.show_canvas_display_name
         # Is it valid and connected
@@ -136,30 +130,18 @@ class MPVPlayer(Player):
         if self.audio_sys == 'pulse':
             status,message,self.mpv_sink = self.am.get_sink(self.mpv_audio)
             if status == 'error':
-                self.mon.err(self,message)
-                self.play_state='load-failed'
-                if self.loaded_callback is not  None:
-                    self.loaded_callback('error',message)
-                    return
+                return 'error',message
                     
             if not self.am.sink_connected(self.mpv_sink):
-                self.mon.err(self,'"'+self.mpv_audio +'" display or audio device not connected\n\n    Expected sink is: '+ self.mpv_sink)
-                self.play_state='load-failed'
-                if self.loaded_callback is not  None:
-                    self.loaded_callback('error','display or audio device not connected')
-                    return
+                return 'error','"'+self.mpv_audio +'" display or audio device not connected\n\n    Expected sink is: '+ self.mpv_sink
                     
             self.add_option('ao','pulse')
         else:
-            self.mon.err(self,'audio systems other than pulseaudio are not supported' )
-            self.play_state='load-failed'
-            if self.loaded_callback is not  None:
-                self.loaded_callback('error','audio device not connected')
-                return 
-                
+            return 'error','audio systems other than pulseaudio are not supported'
+               
         # AUDIO DEVICE
         #print (self.mpv_audio,self.mpv_sink)
-        self.add_option ('audio-device','pulse/'+self.mpv_sink)
+        self.add_option ('audio_device','pulse/'+self.mpv_sink)
         
         # VOLUME
         if self.mpv_volume_text != "":
@@ -199,23 +181,18 @@ class MPVPlayer(Player):
 
         # FIT TO WINDOW
         if self.mpv_aspect_mode == 'warp':
-            self.add_option('video-aspect-override',str(self.width)+':'+str(self.height))
+            self.add_option('video_aspect_override',str(self.width)+':'+str(self.height))
         else:
-            self.add_option('video-aspect-override','-1')
+            self.add_option('video_aspect_override','-1')
 
-        #self.add_option('video-unscaled','yes')
+        #self.add_option('video_unscaled','yes')
         #self.add_option('panscan','0.5')       
             
 
         # OTHER OPTIONS
         status,message=self.parse_options(self.track_params['mpv-other-options'])
         if status == 'error':
-            self.mon.err(self,message)
-            self.play_state='load-failed'
-            if self.loaded_callback is not  None:
-                self.loaded_callback('error',message)
-                return
-
+            return status,message
         
         # PAUSE TIMEOUT
         if self.pause_timeout_text.isdigit():
@@ -231,7 +208,8 @@ class MPVPlayer(Player):
         
 
    # LOAD - creates a mpv instance, loads a track and then pause
-    def load(self,track,loaded_callback,enable_menu):  
+    def load(self,track,loaded_callback,enable_menu): 
+        #print ('\nplayer load',track) 
         # instantiate arguments
         self.track=track
         self.loaded_callback=loaded_callback   #callback when loaded
@@ -302,6 +280,7 @@ class MPVPlayer(Player):
 
      # SHOW - show a track      
     def show(self,ready_callback,finished_callback,closed_callback):
+        #print ('player show',self.track)
         self.ready_callback=ready_callback         # callback when paused after load ready to show video
         self.finished_callback=finished_callback         # callback when finished showing
         self.closed_callback=closed_callback
@@ -325,6 +304,7 @@ class MPVPlayer(Player):
 
     # CLOSE - quits vlcdriver from 'pause at end' state
     def close(self,closed_callback):
+        #print ('player close',self.track)
         self.mon.trace(self,'')
         self.mon.log(self,">close received from show Id: "+ str(self.show_id))
         self.closed_callback=closed_callback
@@ -513,6 +493,7 @@ class MPVPlayer(Player):
 
     # respond to normal stop
     def stop(self):
+        #print ('player stop')
         self.mon.log(self,">stop received from show Id: "+ str(self.show_id))
         # cancel the pause timer
         if self.pause_timer != None:
@@ -522,12 +503,14 @@ class MPVPlayer(Player):
 
 
     def start_state_machine_close(self):
+        #print ('player start state close',self.track)
         # self.mon.log(self,">close received from show Id: "+ str(self.show_id))
         # cancel the pause timer
         if self.pause_timer != None:
             self.canvas.after_cancel(self.pause_timer)
             self.pause_timer=None
         self.mpvdriver.close()
+        
         self.play_state='closing'
         #print ('start close state machine close')
         self.tick_timer=self.canvas.after(0, self.show_state_machine)
@@ -666,12 +649,12 @@ class MPVPlayer(Player):
         if text.strip() == '':
             return 'normal',''
         options=text.split(',')
-        print (options)
+        #print (options)
         for option in options:
             if option.count('=') !=1:
                 return 'error','malformed option: '+ option
             result=option.split('=')
-            self.add_option(result[0].strip(),result[1].strip())
+            self.add_option(result[0].strip().replace("-", "_"),result[1].strip())
         return 'normal',''
 
 

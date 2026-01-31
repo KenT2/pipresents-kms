@@ -1,4 +1,16 @@
 
+CHANGES FOR 1.5.3h  25/1/2026
+===================================
+fixed - PP-KMS works on Trixie, the latest RPi OS version and hence Pi5
+fixed - video playing is now reliable
+fixed  - crash after error report when audio sink is not connected etc. in MPV Video player
+modified - pp_audio.cfg, A/V now has a different sink name for each model of Pi.
+modified - Readme.md, Pi Presents KMS now uses Trixie
+modified - Readme.md, PP-KMS must use X11 not Wayland
+modified - Readme.md  This issues requires pulseaudio-utils
+modified - manual, autostart at power on method has changed.
+modified - manual, updated text on Hardware requirements to gove my current thoughts on video performance.
+
 CHANGES FOR 1.5.3g  19/10/2025
 ===================================
 fixed - added A/V to pp_definitions.py for shows

@@ -430,7 +430,8 @@ class Show(object):
     # wait for unloading or closing to complete then end
     def _wait_for_end(self):
         if self.leak is True:
-            print('IN ',self.show_params['title'])
+            print('IN wait for end',self.show_params['title'])
+            print('Uncollectable Garbage',gc.collect())
         self.mon.trace(self, self.mon.pretty_inst(self.current_player))
         if self.current_player is not None:
             self.mon.trace(self,' - play state is ' +self.current_player.get_play_state())

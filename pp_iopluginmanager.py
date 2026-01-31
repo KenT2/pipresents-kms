@@ -1,7 +1,7 @@
 import os
-import imp
 import configparser
 from pp_utils import Monitor
+from importlib.util import spec_from_file_location, module_from_spec
 
 class IOPluginManager(object):
 
@@ -118,13 +118,14 @@ class IOPluginManager(object):
                     self.mon.log(self,message)
         self.mon.log (self,'All installed I/O plugins scanned')
         return 'normal','output scan complete'
+    
 
     def _load_plugin_file(self, name, driver_dir):
-        fp, pathname,description = imp.find_module(name,[driver_dir])
-        module_id =  imp.load_module(name,fp,pathname,description)
-        plugin_class = getattr(module_id,name)
+        spec = spec_from_file_location(name, driver_dir+'/'+name+'.py')
+        module_obj = module_from_spec(spec)
+        spec.loader.exec_module(module_obj)
+        plugin_class = getattr(module_obj,name)
         return plugin_class()
-
         
 
     def _read(self,filename,filepath):

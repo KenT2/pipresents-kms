@@ -22,7 +22,7 @@ import gc
 from tkinter import Tk, Canvas
 import tkinter.messagebox
 from time import sleep
-# import objgraph
+import objgraph
 
 
 from pp_options import command_options
@@ -33,6 +33,7 @@ from pp_screendriver import ScreenDriver
 from pp_timeofday import TimeOfDay
 from pp_utils import Monitor
 from pp_utils import StopWatch
+from pp_utils import os_info
 from pp_animate import Animate
 from pp_oscdriver import OSCDriver
 from pp_network import Mailer, Network
@@ -58,7 +59,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.3"
-        self.pipresents_minorissue = '1.5.3g'
+        self.pipresents_minorissue = '1.5.3h'
 
         StopWatch.global_enable=False
         
@@ -127,6 +128,12 @@ class PiPresents(object):
         # self.mon.log (self," OS and separator:" + os.name +'  ' + os.sep)
         self.mon.log(self,"sys.path[0] -  location of code: "+sys.path[0])
 
+        # log version of Linux
+        linux_file='/etc/os-release'
+        if os.path.exists(linux_file):
+            version = os_info(linux_file)
+            self.mon.log(self,'\nLinux OS: ' + version['PRETTY_NAME'])
+            
         # log version of RPi OS
         if os.path.exists("/boot/issue.txt"):
             ifile=open("/boot/issue.txt")
@@ -816,7 +823,9 @@ class PiPresents(object):
             # close logging files
             self.mon.finish()
             #print('Uncollectable Garbage',gc.collect())
-            # objgraph.show_backrefs(objgraph.by_type('Canvas'),filename='backrefs.png')
+            #objgraph.show_growth()
+            #print (objgraph.get_leaking_objects())
+            #objgraph.show_backrefs(objgraph.by_type('MPV'),filename='backrefs.png')
             sys.exit(101)
             
                           

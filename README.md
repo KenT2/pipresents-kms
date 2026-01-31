@@ -4,7 +4,7 @@ PI PRESENTS  - Version 1.5.3 (KMS)
 Diese Readme-Datei hat Peter Vasen ins Deutsche übersetzt. Klicken Sie hier 
 http://www.web-echo.de/4.html
 
-'KMS' is the the current stable version of Pi Presents. It is compatible with the legacy RPi OS Bullseye and hence is limited to Pi4 or earlier models.
+'KMS' is the the current stable version of Pi Presents. It is compatible with 64 bit RPi OS Trixie and hence can be used on Pi5 or earlier models.
 
  KMS has all the features of Gapless/Beep with Omxplayer replaced with MPV and UZBL web browser replaced by Chromium.
 
@@ -49,30 +49,26 @@ Requirements
 -------------
 
 	* Must use:
-	* The latest version of the legacy 32 bit RPi OS Bullseye with Desktop (not the Lite version)
+	* The latest version of 64 bit RPi OS Trixie with Desktop (not the Lite version)
 	* Must be run from the PIXEL desktop.
 	* Can be installed and run from any user that is created with RPi OS utilities
 	* Must have Python 3 installed (which RPi OS does)
 	* Should use a clean install of RPi OS, particularly if you intend to use GPIO
 
-Install RPi OS Bullseye
+Install RPi OS Trixie
 -----------------------
 
-Using RPi Imager image a SD Card with RPi OS Bullseye with desktop (32 Bit)
+Using RPi Imager image a SD Card with RPi OS Trixie with desktop (64 Bit)
 
-Pi Towers has released a new version of RPi OS based on Debian Trixie. This means that RPi Imager does not include RPi OS Bullseye which is the version required by PP-KMS. However it is possible to obtain it from the Raspberry Pi Archive using these instructions:
-
-Using a browser go to
-
-    https://downloads.raspberrypi.org/raspios_armhf/images/raspios_armhf-2023-05-03/
-
-and download the file 
-
-    2023-05-03-raspios-bullseye-armhf.img.xz
-
-You can check the correctness of the download using one of the check files in the directory.
-
-When using RPi Imager select 'Use custom' and select the downloaded img.xz file.
+NEW - Change Display Manager from Wayland to X11
+------------------------------------------------
+In a terminal window type:
+         sudo raspi-config
+         
+   navigate to 6 Advanced Options > A7 Wayland
+   select W1 X11 Openbox window manager....
+   Tab to OK
+   Tab to Reboot  
 
 Ensure the OS is up to date:
 
@@ -82,13 +78,13 @@ Ensure the OS is up to date:
 
 Install packages 
 -----------------------------
+         sudo apt install pulseaudio-utils    #(NEW)
          sudo apt install python3-pil.imagetk
          sudo apt install unclutter
          sudo apt install mplayer
          sudo apt install chromium-chromedriver
          sudo apt install python3-selenium
          sudo apt install mpv
-         sudo apt install python3-mpv
          sudo apt install mpg123 (optonal for .mp3 beeps)
 
 
@@ -141,7 +137,7 @@ UPDATING PI PRESENTS FROM PI PRESENTS BEEP OR PI PRESENTS GAPLESS
 
 Backup the directories /home/pi/pipresents and /home/pi/pp_home. You will need to copy some of the files to a new SD card.
 
-Pi Presents KMS requires Raspberry Pi OS Bullseye or later so first install the operating system on a new SD card and then follow the instructions above for a new install of Pi Presents KMS.
+Pi Presents KMS requires Raspberry Pi OS Trixie so first install the operating system on a new SD card and then follow the instructions above for a new install of Pi Presents KMS.
 
 Copy any files you have made or changed from old to new /pipresents/pp_io_config directory.
 
