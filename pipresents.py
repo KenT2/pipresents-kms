@@ -59,7 +59,7 @@ class PiPresents(object):
         # gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_INSTANCES|gc.DEBUG_OBJECTS|gc.DEBUG_SAVEALL)
         gc.set_debug(gc.DEBUG_UNCOLLECTABLE|gc.DEBUG_SAVEALL)
         self.pipresents_issue="1.5.3"
-        self.pipresents_minorissue = '1.5.3h'
+        self.pipresents_minorissue = '1.5.3i'
 
         StopWatch.global_enable=False
         
@@ -282,12 +282,6 @@ class PiPresents(object):
 # ********************
 # SET UP THE GUI
 # ********************
-        # turn off the screenblanking and saver
-        if self.options['noblank'] is True:
-            call(["xset","s", "off"])
-            #call(["xset","s", "-dpms"])
-            call(["xset","s", "noblank"])
-
 
         # find connected displays and create a canvas for each display
         self.dm=DisplayManager()
@@ -869,11 +863,6 @@ class PiPresents(object):
         # backlight
         if self.dm != None:
             self.dm.terminate()
-        # turn screen blanking back on
-        if self.options['noblank'] is True:
-            call(["xset","s", "on"])
-            #call(["xset","s", "+dpms"])
-            call(["xset","s", "blank"])
             
         # tidy up animation
         if self.animate is not None:

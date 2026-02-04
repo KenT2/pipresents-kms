@@ -1,3 +1,7 @@
+Version 1.5.3i  4/2/2026
+=============================
+Screen blanking is now controlled by the RPi OS Control centre, not the -b option.
+
 Version 1.5.3h  25/1/2026
 ========================
 Pi Presents requires pulseaudio-utils to be installed (see Readme.md)

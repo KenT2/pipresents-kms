@@ -10,7 +10,6 @@ def command_options():
     wait_no_w=5
     wait_w = 0
     parser = argparse.ArgumentParser(description = 'Pi Presents multimedia toolkit')
-    parser.add_argument( '-b','--noblank', action='store_true', help='Disable screen blanking.')
     parser.add_argument( '-f','--fullscreen', action='store_true',help='Full Screen')
     parser.add_argument( '-d','--debug', nargs='?', default=debug_no_d, const=debug_d,help='Enable Debug Output [and loglevel]')
     parser.add_argument( '-o','--home', nargs='?', default='', const='',help='Path to pp_home')
