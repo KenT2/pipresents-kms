@@ -82,7 +82,6 @@ Install packages
          sudo apt install python3-pil.imagetk
          sudo apt install unclutter
          sudo apt install mplayer
-         sudo apt install chromium-chromedriver
          sudo apt install python3-selenium
          sudo apt install mpv
          sudo apt install mpg123 (optonal for .mp3 beeps)

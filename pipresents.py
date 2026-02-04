@@ -22,7 +22,7 @@ import gc
 from tkinter import Tk, Canvas
 import tkinter.messagebox
 from time import sleep
-import objgraph
+#import objgraph
 
 
 from pp_options import command_options

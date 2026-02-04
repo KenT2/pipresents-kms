@@ -44,7 +44,7 @@ import sys,os
 from python_mpv_jsonipc_plus import MPV
 import tkinter as tk
 from pp_utils import Monitor
-import objgraph
+#import objgraph
 import gc
 
 class MPVDriver(object):
