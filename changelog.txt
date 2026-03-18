@@ -1,3 +1,8 @@
+CHANGES FOR 1.5.3j  17/3/2026
+===================================
+enhanced - improved mpv options so PP can play higher resolution videos with smaller CPU occupancy
+fixed - videos destined for HDMI1 now play on that monitor not in HDMI0
+
 CHANGES FOR 1.5.3i  4/2/2026
 ===================================
 modified - removed -b (noblank) option. Blanking is now controlled by RPi OS Control Centre

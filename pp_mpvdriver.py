@@ -85,11 +85,13 @@ class MPVDriver(object):
         self.load_position=-1
         self.load_complete_signal=False
         #self.video_frame=tk.Frame(height=self.height,width=self.width,bg=self.background_colour)
-        self.video_frame=tk.Frame(height=0,width=0,bg=self.background_colour)
+        self.video_frame=tk.Frame(master=self.canvas,height=0,width=0,bg=self.background_colour)
         self.video_frame.place(x=x,y=y)
         self.root.update_idletasks()
         self.player=MPV(input_default_bindings='no', input_vo_keyboard ='no',osc='no',
-                                     profile='fast',config='no',
+                                     profile='fast',
+                                     config='no',
+                                     vo='gpu',gpu_api='opengl',gpu_dumb_mode='yes',hwdec='drm-copy',
                                      wid=str(int(self.video_frame.winfo_id()))
                                      )
 
